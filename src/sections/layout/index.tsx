@@ -37,6 +37,11 @@ export default function Layout({ children }: PropsWithChildren) {
           display: "flex",
           flexDirection: "column",
           height: "100vh",
+          minHeight: "-webkit-fill-available",
+          "@supports (height: 100dvh)": {
+            height: "100dvh",
+            maxHeight: "100dvh",
+          },
           maxHeight: "100vh",
           overflow: "hidden",
           backgroundColor: isDarkMode ? "#19191c" : "#f0f2f5",
