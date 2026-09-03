@@ -2,7 +2,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 import { NextConfig } from "next";
 import { PHASE_PRODUCTION_BUILD } from "next/constants";
 
-const nextConfig = (_phase: string): NextConfig => ({
+const nextConfig = (phase: string): NextConfig => ({
   devIndicators: false,
   trailingSlash: false,
   reactStrictMode: true,
