@@ -25,6 +25,7 @@ import JobCard from "@/components/JobCard";
 import jobsData from "@/data/jobs.json";
 import { Job, JobField } from "@/types/job";
 import { useRouter } from "next/router";
+import { submitLeadToGoogleSheet } from "@/lib/sheets";
 
 const ALL_FIELDS: JobField[] = [
   "Software Development",
@@ -121,6 +122,14 @@ export default function JobsPage() {
     e.preventDefault();
     if (applicantName.trim() && applicantEmail.trim()) {
       setApplied(true);
+      submitLeadToGoogleSheet({
+        name: applicantName.trim(),
+        email: applicantEmail.trim(),
+        jobId: interestedJob?.id,
+        jobTitle: interestedJob?.title,
+        company: interestedJob?.company,
+        salary: interestedJob?.salary,
+      });
     }
   };
 

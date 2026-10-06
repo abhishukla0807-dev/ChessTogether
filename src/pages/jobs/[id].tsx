@@ -19,6 +19,7 @@ import { PageTitle } from "@/components/pageTitle";
 import JobCard from "@/components/JobCard";
 import jobsData from "@/data/jobs.json";
 import { Job } from "@/types/job";
+import { submitLeadToGoogleSheet } from "@/lib/sheets";
 
 export default function JobDetailsPage() {
   const router = useRouter();
@@ -57,6 +58,15 @@ export default function JobDetailsPage() {
     e.preventDefault();
     if (name.trim() && email.trim()) {
       setApplied(true);
+      submitLeadToGoogleSheet({
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        jobId: job?.id,
+        jobTitle: job?.title,
+        company: job?.company,
+        salary: job?.salary,
+      });
     }
   };
 
