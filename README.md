@@ -1,6 +1,3 @@
-<div align="center">
-  <img width="100" height="100" src="public/android-chrome-192x192.png" alt="ByteMate / ChessTogether Logo" style="border-radius: 20px;">
-
   # ♟️ ByteMate / ChessTogether
 
   **High-Throughput Full-Stack Real-Time Chess, Engineering Education & Careers Platform**
