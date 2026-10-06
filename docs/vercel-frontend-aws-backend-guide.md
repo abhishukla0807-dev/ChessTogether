@@ -78,35 +78,21 @@ curl http://localhost/health
 
 | Key | Value | Notes |
 | :--- | :--- | :--- |
-| `BACKEND_URL` | `http://<YOUR_EC2_PUBLIC_IP>` | Used by Next.js server-side rewrites |
-| `NEXT_PUBLIC_SOCKET_URL` | `http://<YOUR_EC2_PUBLIC_IP>` *(or your SSL domain)* | Client WebSocket endpoint |
+| `BACKEND_URL` | `https://chesstogether-abhi.duckdns.org` | Used by Next.js server-side rewrites |
+| `NEXT_PUBLIC_SOCKET_URL` | `https://chesstogether-abhi.duckdns.org` | Client WebSocket endpoint (WSS) |
 
 5. Click **Deploy**! 🚀
 In ~60 seconds, Vercel will give you a live domain like `https://chesstogether.vercel.app`.
 
 ---
 
-## 🔒 Part 3: The Free SSL Setup (Important for WebSockets)
+## 🔒 Part 3: Active SSL Setup
 
-Since Vercel is `https://`, browsers require WebSocket connections to be secure (`wss://`) to prevent **Mixed Content** warnings.
-
-Here are the **2 easiest 100% free ways** to get SSL for your EC2 backend:
-
-### Option A: Free DuckDNS + Certbot (Takes 3 minutes)
-
-1. Go to [duckdns.org](https://www.duckdns.org/), log in, and create a free subdomain:
-   - e.g., `mychess.duckdns.org`
-   - Set the IP to your **`<YOUR_EC2_PUBLIC_IP>`**.
-2. On your EC2 instance, install Certbot:
-   ```bash
-   sudo apt-get update
-   sudo apt-get install -y certbot python3-certbot-nginx
-   sudo certbot --nginx -d mychess.duckdns.org
-   ```
-3. Update Vercel Environment Variables:
-   - `BACKEND_URL` = `https://mychess.duckdns.org`
-   - `NEXT_PUBLIC_SOCKET_URL` = `https://mychess.duckdns.org`
-4. Redeploy Vercel! Your WebSockets will now connect via `wss://mychess.duckdns.org` with zero browser warnings!
+Backend is live on:
+- **IP**: `13.126.89.91`
+- **Domain**: `https://chesstogether-abhi.duckdns.org`
+- **SSL**: Active (Let's Encrypt Certbot + Nginx reverse proxy)
+- **WebSockets**: `wss://chesstogether-abhi.duckdns.org/api/socket_io`
 
 ### Option B: Free Cloudflare Proxy
 
