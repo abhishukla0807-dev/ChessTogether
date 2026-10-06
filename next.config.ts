@@ -10,6 +10,22 @@ const nextConfig = (phase: string): NextConfig => ({
   images: {
     unoptimized: true,
   },
+  async rewrites() {
+    const rawBackend = process.env.BACKEND_URL || "http://localhost:8080";
+    const rawSocket = process.env.SOCKET_URL || "http://localhost:9092";
+    const backendUrl = rawBackend.replace(/\/+$/, "");
+    const socketUrl = rawSocket.replace(/\/+$/, "");
+    return [
+      {
+        source: "/api/socket_io/:path*",
+        destination: `${socketUrl}/api/socket_io/:path*`,
+      },
+      {
+        source: "/api/:path*",
+        destination: `${backendUrl}/api/:path*`,
+      },
+    ];
+  },
   headers:
     phase === PHASE_PRODUCTION_BUILD
       ? undefined

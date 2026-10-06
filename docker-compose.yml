@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # ── Java Spring Boot + Netty Socket.IO Backend ──
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: chesstogether-backend
+    environment:
+      - SERVER_PORT=8080
+      - SOCKETIO_PORT=9092
+      - SOCKETIO_HOST=0.0.0.0
+      - JAVA_OPTS=-XX:+UseSerialGC -Xms128m -Xmx280m
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+
+  # ── Next.js Frontend ──
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: chesstogether-frontend
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - NODE_OPTIONS=--max-old-space-size=256
+    depends_on:
+      - backend
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+
+  # ── Nginx Unified Reverse Proxy (Port 80 & 443) ──
+  nginx:
+    image: nginx:alpine
+    container_name: chesstogether-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx.aws.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 64M

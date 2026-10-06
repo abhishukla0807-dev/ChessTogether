@@ -300,17 +300,27 @@ export default function ChatPage() {
   return (
     <Box
       sx={{
-        maxWidth: 720,
-        mx: "auto",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
         px: { xs: 1, sm: 2 },
-        py: { xs: 1.5, sm: 3 },
+        py: { xs: 1, sm: 2 },
+        overflow: "hidden",
       }}
     >
       <PageTitle title="ByteMate — Chat" />
 
-      {/* ── Main Chat Box (Background exactly matching #19191c header) ── */}
+      {/* ── Main Chat Box (Identical size for both Global Lobby and Match Session) ── */}
       <Box
         sx={{
+          width: "100%",
+          maxWidth: { xs: "100%", sm: 540 },
+          height: { xs: "100%", sm: 620 },
+          maxHeight: "calc(100vh - 85px)",
+          minHeight: { xs: 450, sm: 520 },
           backgroundColor: "#19191c",
           border: "2px solid",
           borderColor: "primary.main",
@@ -318,8 +328,6 @@ export default function ChatPage() {
           boxShadow: "0 4px 20px rgba(0, 0, 0, 0.6)",
           display: "flex",
           flexDirection: "column",
-          height: { xs: "calc(90vh - 80px)", sm: "calc(84vh - 70px)" },
-          minHeight: 480,
           overflow: "hidden",
         }}
       >

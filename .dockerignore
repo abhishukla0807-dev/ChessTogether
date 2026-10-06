@@ -1,5 +1,11 @@
 node_modules
+.next
 .git
 .gitignore
 *.md
 out
+backend
+content
+docs
+data
+docker/certs

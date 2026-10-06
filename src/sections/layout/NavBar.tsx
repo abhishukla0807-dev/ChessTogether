@@ -35,10 +35,6 @@ export default function NavBar({ darkMode, switchDarkMode }: Props) {
     setDrawerOpen(false);
   }, [router.pathname]);
 
-  const isLearnActive = router.pathname === "/learn";
-  const isPlayActive = router.pathname === "/play" || router.pathname === "/";
-  const isChatActive = router.pathname === "/chat";
-
   return (
     <Box component="header" sx={{ width: "100%", flexShrink: 0 }}>
       <AppBar
@@ -69,7 +65,7 @@ export default function NavBar({ darkMode, switchDarkMode }: Props) {
             <Icon icon="mdi:menu" />
           </IconButton>
 
-          {/* Logo / Brand Name */}
+          {/* Logo / Brand Name — right next to hamburger */}
           <NavLink href="/">
             <Typography
               variant="h6"
@@ -80,83 +76,83 @@ export default function NavBar({ darkMode, switchDarkMode }: Props) {
                 letterSpacing: "-0.02em",
                 color: darkMode ? "#ffffff" : "#1a1d21",
                 cursor: "pointer",
-                mr: 3.5,
+                mr: { xs: 0, sm: 3.5 },
               }}
             >
               ByteMate
             </Typography>
           </NavLink>
 
-          {/* Direct Navigation Links: Learn, Play, Chat */}
+          {/* Main Navigation Links: Play, Learn, Jobs, Chat */}
           <Box
             sx={{
               display: { xs: "none", sm: "flex" },
               alignItems: "center",
-              gap: 3,
+              gap: { sm: 2, md: 3 },
             }}
           >
-            <NavLink href="/learn">
-              <Typography
-                sx={{
-                  fontSize: "0.92rem",
-                  fontWeight: isLearnActive ? 700 : 500,
-                  color: isLearnActive
-                    ? "primary.main"
-                    : darkMode
-                    ? "#cbd5e0"
-                    : "#4a5568",
-                  cursor: "pointer",
-                  transition: "color 0.2s",
-                  "&:hover": {
-                    color: "primary.main",
-                  },
-                }}
-              >
-                Learn
-              </Typography>
-            </NavLink>
-
-            <NavLink href="/play">
-              <Typography
-                sx={{
-                  fontSize: "0.92rem",
-                  fontWeight: isPlayActive ? 700 : 500,
-                  color: isPlayActive
-                    ? "primary.main"
-                    : darkMode
-                    ? "#cbd5e0"
-                    : "#4a5568",
-                  cursor: "pointer",
-                  transition: "color 0.2s",
-                  "&:hover": {
-                    color: "primary.main",
-                  },
-                }}
-              >
-                Play
-              </Typography>
-            </NavLink>
-
-            <NavLink href="/chat">
-              <Typography
-                sx={{
-                  fontSize: "0.92rem",
-                  fontWeight: isChatActive ? 700 : 500,
-                  color: isChatActive
-                    ? "primary.main"
-                    : darkMode
-                    ? "#cbd5e0"
-                    : "#4a5568",
-                  cursor: "pointer",
-                  transition: "color 0.2s",
-                  "&:hover": {
-                    color: "primary.main",
-                  },
-                }}
-              >
-                Chat
-              </Typography>
-            </NavLink>
+            {[
+              {
+                text: "Play",
+                href: "/play",
+                isActive: router.pathname === "/play" || router.pathname === "/",
+              },
+              {
+                text: "Learn",
+                href: "/learn",
+                isActive: router.pathname.startsWith("/learn"),
+              },
+              {
+                text: "Exams",
+                href: "/exams",
+                isActive: router.pathname.startsWith("/exams"),
+              },
+              {
+                text: "Jobs",
+                href: "/jobs",
+                isActive: router.pathname.startsWith("/jobs"),
+              },
+              {
+                text: "Chat",
+                href: "/chat",
+                isActive: router.pathname.startsWith("/chat"),
+              },
+            ].map(({ text, href, isActive }) => (
+              <NavLink key={text} href={href}>
+                <Typography
+                  sx={{
+                    fontSize: "0.92rem",
+                    fontWeight: isActive ? 700 : 500,
+                    color: isActive
+                      ? "primary.main"
+                      : darkMode
+                      ? "#cbd5e0"
+                      : "#4a5568",
+                    cursor: "pointer",
+                    position: "relative",
+                    py: 0.5,
+                    transition: "color 0.2s ease",
+                    "&:hover": {
+                      color: "primary.main",
+                    },
+                    ...(isActive && {
+                      "&::after": {
+                        content: '""',
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: "2px",
+                        backgroundColor: "primary.main",
+                        borderRadius: "2px",
+                      },
+                    }),
+                  }}
+                >
+                  {text}
+                </Typography>
+              </NavLink>
+            ))}
           </Box>
 
           {/* Spacer pushing right buttons to far right */}

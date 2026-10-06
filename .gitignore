@@ -6,9 +6,18 @@ node_modules
 out/
 next-env.d.ts
 
+# Java / Maven
+target/
+backend/target/
+*.class
+*.jar
+.idea/
+*.iml
+
 # misc
 .DS_Store
 *.pem
+.vscode/
 
 # env files
 .env*.local

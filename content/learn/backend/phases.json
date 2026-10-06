@@ -1,0 +1,428 @@
+[
+  {
+    "id": "phase-1",
+    "phaseNum": "PHASE 1",
+    "title": "FUNDAMENTALS",
+    "description": "Core concepts of web architecture, request lifecycle, protocols, and data modeling.",
+    "chapters": [
+      {
+        "id": "01",
+        "num": "01",
+        "title": "Backend Systems",
+        "subtopics": [
+          "client-and-server",
+          "request-flow",
+          "web-and-app-servers",
+          "databases-and-cache",
+          "monolith-vs-microservices"
+        ]
+      },
+      {
+        "id": "02",
+        "num": "02",
+        "title": "HTTP Protocol",
+        "subtopics": [
+          "http-request-and-response",
+          "http-methods",
+          "status-codes",
+          "headers",
+          "http-versions",
+          "https-and-tls"
+        ]
+      },
+      {
+        "id": "03",
+        "num": "03",
+        "title": "Routing",
+        "subtopics": [
+          "routes-and-handlers",
+          "static-routes",
+          "dynamic-routes",
+          "query-parameters",
+          "route-organization"
+        ]
+      },
+      {
+        "id": "04",
+        "num": "04",
+        "title": "Serialization",
+        "subtopics": [
+          "serialization",
+          "deserialization",
+          "json-and-xml",
+          "binary-formats",
+          "schema-evolution"
+        ]
+      },
+      {
+        "id": "05",
+        "num": "05",
+        "title": "Authentication & Authorization",
+        "subtopics": [
+          "auth-vs-authz",
+          "sessions",
+          "jwt",
+          "oauth-and-oidc",
+          "rbac-and-permissions"
+        ]
+      },
+      {
+        "id": "06",
+        "num": "06",
+        "title": "Validation & Transformation",
+        "subtopics": [
+          "input-validation",
+          "type-and-format-validation",
+          "business-validation",
+          "sanitization",
+          "data-transformation"
+        ]
+      },
+      {
+        "id": "07",
+        "num": "07",
+        "title": "Middleware",
+        "subtopics": [
+          "middleware-pipeline",
+          "auth-middleware",
+          "logging",
+          "cors",
+          "rate-limiting",
+          "error-middleware"
+        ]
+      },
+      {
+        "id": "08",
+        "num": "08",
+        "title": "Request Context",
+        "subtopics": [
+          "request-scoped-data",
+          "request-id",
+          "user-context",
+          "trace-context",
+          "cancellation-and-deadlines"
+        ]
+      },
+      {
+        "id": "09",
+        "num": "09",
+        "title": "Handlers & Controllers",
+        "subtopics": [
+          "request-handling",
+          "controllers",
+          "service-calls",
+          "response-mapping",
+          "thin-controllers"
+        ]
+      },
+      {
+        "id": "10",
+        "num": "10",
+        "title": "CRUD",
+        "subtopics": [
+          "create",
+          "read",
+          "update",
+          "delete",
+          "put-vs-patch"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-2",
+    "phaseNum": "PHASE 2",
+    "title": "API & DATA",
+    "description": "RESTful API design, database modeling, business logic layers, caching, and search systems.",
+    "chapters": [
+      {
+        "id": "11",
+        "num": "11",
+        "title": "REST API Design",
+        "subtopics": [
+          "resource-design",
+          "rest-http-methods",
+          "api-versioning",
+          "pagination",
+          "filtering-and-sorting",
+          "error-responses"
+        ]
+      },
+      {
+        "id": "12",
+        "num": "12",
+        "title": "Databases",
+        "subtopics": [
+          "sql-fundamentals",
+          "relationships-and-joins",
+          "indexing",
+          "transactions",
+          "nosql",
+          "database-scaling"
+        ]
+      },
+      {
+        "id": "13",
+        "num": "13",
+        "title": "Business Logic",
+        "subtopics": [
+          "service-layer",
+          "business-rules",
+          "domain-models",
+          "logic-transactions",
+          "clean-architecture"
+        ]
+      },
+      {
+        "id": "14",
+        "num": "14",
+        "title": "Caching",
+        "subtopics": [
+          "why-caching",
+          "cache-aside",
+          "write-through",
+          "cache-invalidation",
+          "redis",
+          "cache-problems"
+        ]
+      },
+      {
+        "id": "15",
+        "num": "15",
+        "title": "Transactional Emails",
+        "subtopics": [
+          "email-types",
+          "email-providers",
+          "templates",
+          "background-sending",
+          "delivery-and-retry"
+        ]
+      },
+      {
+        "id": "16",
+        "num": "16",
+        "title": "Task Queues & Scheduling",
+        "subtopics": [
+          "queues-and-workers",
+          "producers-and-consumers",
+          "retries",
+          "dead-letter-queues",
+          "scheduled-jobs",
+          "backpressure"
+        ]
+      },
+      {
+        "id": "17",
+        "num": "17",
+        "title": "Elasticsearch",
+        "subtopics": [
+          "index-and-documents",
+          "inverted-index",
+          "mapping",
+          "query-dsl",
+          "aggregations",
+          "database-synchronization"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-3",
+    "phaseNum": "PHASE 3",
+    "title": "RELIABILITY & SECURITY",
+    "description": "Production fault tolerance, application configuration, telemetry, and security defense in depth.",
+    "chapters": [
+      {
+        "id": "18",
+        "num": "18",
+        "title": "Error Handling",
+        "subtopics": [
+          "error-types",
+          "http-error-mapping",
+          "global-error-handling",
+          "retry-strategies",
+          "circuit-breakers"
+        ]
+      },
+      {
+        "id": "19",
+        "num": "19",
+        "title": "Configuration",
+        "subtopics": [
+          "environment-variables",
+          "configuration-files",
+          "secrets",
+          "environment-separation",
+          "feature-flags"
+        ]
+      },
+      {
+        "id": "20",
+        "num": "20",
+        "title": "Observability",
+        "subtopics": [
+          "logging-observability",
+          "metrics",
+          "distributed-tracing",
+          "health-checks",
+          "alerts-and-slos"
+        ]
+      },
+      {
+        "id": "21",
+        "num": "21",
+        "title": "Graceful Shutdown",
+        "subtopics": [
+          "shutdown-signals",
+          "stop-new-requests",
+          "complete-in-flight-requests",
+          "resource-cleanup",
+          "shutdown-timeouts"
+        ]
+      },
+      {
+        "id": "22",
+        "num": "22",
+        "title": "Security",
+        "subtopics": [
+          "owasp-top-10",
+          "injection-prevention",
+          "https-and-tls-security",
+          "rate-limiting-security",
+          "security-headers",
+          "dependency-security"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-4",
+    "phaseNum": "PHASE 4",
+    "title": "ADVANCED BACKEND",
+    "description": "High-scale engineering, concurrency models, S3 object storage, WebSockets, and test automation.",
+    "chapters": [
+      {
+        "id": "23",
+        "num": "23",
+        "title": "Scaling & Performance",
+        "subtopics": [
+          "vertical-vs-horizontal-scaling",
+          "load-balancing",
+          "database-scaling-adv",
+          "cdn-and-edge",
+          "profiling",
+          "capacity-planning"
+        ]
+      },
+      {
+        "id": "24",
+        "num": "24",
+        "title": "Concurrency & Parallelism",
+        "subtopics": [
+          "concurrency-vs-parallelism",
+          "threads-and-processes",
+          "async-programming",
+          "race-conditions",
+          "locks-and-synchronization",
+          "backpressure-concurrency"
+        ]
+      },
+      {
+        "id": "25",
+        "num": "25",
+        "title": "Object Storage",
+        "subtopics": [
+          "object-storage-concepts",
+          "buckets-and-objects",
+          "presigned-urls",
+          "multipart-upload",
+          "file-processing"
+        ]
+      },
+      {
+        "id": "26",
+        "num": "26",
+        "title": "Real-Time Systems",
+        "subtopics": [
+          "websockets",
+          "server-sent-events",
+          "long-polling",
+          "pub-sub",
+          "presence",
+          "real-time-scaling"
+        ]
+      },
+      {
+        "id": "27",
+        "num": "27",
+        "title": "Testing",
+        "subtopics": [
+          "unit-testing",
+          "integration-testing",
+          "end-to-end-testing",
+          "test-doubles",
+          "api-testing",
+          "ci-testing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-5",
+    "phaseNum": "PHASE 5",
+    "title": "STANDARDS & DEVOPS",
+    "description": "Industry architectural standards, OpenAPI specs, webhook reliability, and modern containerized CI/CD.",
+    "chapters": [
+      {
+        "id": "28",
+        "num": "28",
+        "title": "12-Factor App",
+        "subtopics": [
+          "codebase",
+          "dependencies",
+          "configuration-12factor",
+          "backing-services",
+          "stateless-processes",
+          "dev-prod-parity"
+        ]
+      },
+      {
+        "id": "29",
+        "num": "29",
+        "title": "OpenAPI",
+        "subtopics": [
+          "openapi-specification",
+          "paths-and-operations",
+          "schemas",
+          "openapi-authentication",
+          "api-documentation"
+        ]
+      },
+      {
+        "id": "30",
+        "num": "30",
+        "title": "Webhooks",
+        "subtopics": [
+          "webhook-fundamentals",
+          "event-payloads",
+          "signature-verification",
+          "idempotency",
+          "retry-and-delivery"
+        ]
+      },
+      {
+        "id": "31",
+        "num": "31",
+        "title": "DevOps",
+        "subtopics": [
+          "git-and-code-review",
+          "ci-cd",
+          "docker",
+          "kubernetes",
+          "infrastructure-as-code",
+          "deployment-strategies"
+        ]
+      }
+    ]
+  }
+]

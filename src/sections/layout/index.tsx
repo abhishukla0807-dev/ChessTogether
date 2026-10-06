@@ -4,9 +4,13 @@ import NavBar from "./NavBar";
 import { red } from "@mui/material/colors";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { MAIN_THEME_COLOR } from "@/constants";
+import { useRouter } from "next/router";
 
 export default function Layout({ children }: PropsWithChildren) {
   const [isDarkMode, setDarkMode] = useLocalStorage("useDarkMode", true);
+  const router = useRouter();
+  const isLearnPage = router.pathname.startsWith("/learn");
+  const isExamsPage = router.pathname.startsWith("/exams");
 
   const theme = useMemo(
     () =>
@@ -58,8 +62,8 @@ export default function Layout({ children }: PropsWithChildren) {
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
-            px: { xs: 1, sm: 2 },
-            py: { xs: 0.5, sm: 1 },
+            px: isLearnPage || isExamsPage ? 0 : { xs: 1, sm: 2 },
+            py: isLearnPage || isExamsPage ? 0 : { xs: 0.5, sm: 1 },
           }}
         >
           {children}

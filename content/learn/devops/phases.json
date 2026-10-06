@@ -1,0 +1,464 @@
+[
+  {
+    "id": "phase-1",
+    "phaseNum": "PHASE 1",
+    "title": "ENGINEERING FOUNDATIONS",
+    "description": "Master version control, shell scripting, automation languages, and Linux systems architecture.",
+    "chapters": [
+      {
+        "id": "01",
+        "num": "01",
+        "title": "Git & Version Control",
+        "subtopics": [
+          "git-fundamentals",
+          "branching-merging",
+          "remote-repositories",
+          "pull-requests",
+          "code-review",
+          "git-workflows",
+          "tags-releases"
+        ]
+      },
+      {
+        "id": "02",
+        "num": "02",
+        "title": "Programming & Automation",
+        "subtopics": [
+          "programming-fundamentals",
+          "python-go",
+          "data-structures",
+          "file-api-handling",
+          "automation-scripts",
+          "cli-tools",
+          "error-handling"
+        ]
+      },
+      {
+        "id": "03",
+        "num": "03",
+        "title": "Linux Fundamentals",
+        "subtopics": [
+          "linux-architecture",
+          "filesystem",
+          "users-groups",
+          "permissions",
+          "processes",
+          "services",
+          "package-management",
+          "environment-variables",
+          "ssh",
+          "bash-scripting"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-2",
+    "phaseNum": "PHASE 2",
+    "title": "NETWORKING & SYSTEMS",
+    "description": "Deep dive into OSI/TCP models, routing, reverse proxies, web servers, and infrastructure security.",
+    "chapters": [
+      {
+        "id": "04",
+        "num": "04",
+        "title": "Networking Fundamentals",
+        "subtopics": [
+          "osi-tcpip",
+          "ip-addressing",
+          "subnets-cidr",
+          "ports",
+          "tcp-udp",
+          "dns",
+          "dhcp",
+          "http-https",
+          "tls",
+          "firewalls",
+          "nat"
+        ]
+      },
+      {
+        "id": "05",
+        "num": "05",
+        "title": "Servers & Web Infrastructure",
+        "subtopics": [
+          "servers-vms",
+          "nginx-apache",
+          "forward-proxy",
+          "reverse-proxy",
+          "load-balancing",
+          "tls-termination",
+          "static-content",
+          "caching",
+          "process-management"
+        ]
+      },
+      {
+        "id": "06",
+        "num": "06",
+        "title": "Security Fundamentals",
+        "subtopics": [
+          "linux-security",
+          "network-security",
+          "iam-concepts",
+          "auth-auth",
+          "secrets",
+          "encryption",
+          "security-groups",
+          "least-privilege"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-3",
+    "phaseNum": "PHASE 3",
+    "title": "CONTAINERIZATION",
+    "description": "Packaging applications, Docker architecture, multi-stage builds, and multi-container composition.",
+    "chapters": [
+      {
+        "id": "07",
+        "num": "07",
+        "title": "Docker & Containers",
+        "subtopics": [
+          "containers-vs-vms",
+          "images",
+          "dockerfile",
+          "docker-cli",
+          "container-lifecycle",
+          "volumes",
+          "networking",
+          "environment-variables-docker",
+          "multi-stage-builds",
+          "docker-compose",
+          "container-registry"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-4",
+    "phaseNum": "PHASE 4",
+    "title": "CLOUD & INFRASTRUCTURE",
+    "description": "Cloud computing fundamentals, Terraform Infrastructure as Code, and Ansible configuration management.",
+    "chapters": [
+      {
+        "id": "08",
+        "num": "08",
+        "title": "Cloud Fundamentals",
+        "subtopics": [
+          "cloud-computing",
+          "regions-az",
+          "compute",
+          "storage",
+          "databases",
+          "cloud-networking",
+          "cloud-iam",
+          "load-balancers",
+          "cloud-dns",
+          "cloud-monitoring",
+          "serverless"
+        ]
+      },
+      {
+        "id": "09",
+        "num": "09",
+        "title": "Infrastructure as Code",
+        "subtopics": [
+          "iac-concepts",
+          "terraform",
+          "providers",
+          "resources",
+          "variables",
+          "outputs",
+          "state",
+          "modules",
+          "remote-state",
+          "workspaces",
+          "infrastructure-provisioning"
+        ]
+      },
+      {
+        "id": "10",
+        "num": "10",
+        "title": "Configuration Management",
+        "subtopics": [
+          "config-management",
+          "ansible",
+          "inventory",
+          "playbooks",
+          "roles",
+          "ansible-variables",
+          "idempotency",
+          "ansible-secrets"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-5",
+    "phaseNum": "PHASE 5",
+    "title": "CI/CD & SOFTWARE DELIVERY",
+    "description": "Automated pipelines, build/test/package workflows, GitHub Actions, and zero-downtime deployment strategies.",
+    "chapters": [
+      {
+        "id": "11",
+        "num": "11",
+        "title": "CI/CD Fundamentals",
+        "subtopics": [
+          "continuous-integration",
+          "continuous-delivery",
+          "continuous-deployment",
+          "pipeline-architecture",
+          "build",
+          "test",
+          "package",
+          "artifact-management",
+          "environment-management",
+          "deployment",
+          "rollbacks"
+        ]
+      },
+      {
+        "id": "12",
+        "num": "12",
+        "title": "CI/CD Platforms",
+        "subtopics": [
+          "github-actions",
+          "jenkins",
+          "gitlab-ci"
+        ]
+      },
+      {
+        "id": "13",
+        "num": "13",
+        "title": "Release & Deployment Strategies",
+        "subtopics": [
+          "rolling-deployment",
+          "blue-green-deployment",
+          "canary-deployment",
+          "recreate-deployment",
+          "feature-flags",
+          "database-migration-strategies",
+          "rollback-strategies"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-6",
+    "phaseNum": "PHASE 6",
+    "title": "KUBERNETES",
+    "description": "Production container orchestration, control plane internals, workloads, networking, and Helm package management.",
+    "chapters": [
+      {
+        "id": "14",
+        "num": "14",
+        "title": "Kubernetes Fundamentals",
+        "subtopics": [
+          "k8s-architecture",
+          "control-plane",
+          "worker-nodes",
+          "pods",
+          "deployments",
+          "replicasets",
+          "services-k8s",
+          "namespaces",
+          "labels-selectors"
+        ]
+      },
+      {
+        "id": "15",
+        "num": "15",
+        "title": "Kubernetes Networking & Configuration",
+        "subtopics": [
+          "service-types",
+          "ingress",
+          "k8s-dns",
+          "configmaps",
+          "k8s-secrets",
+          "network-policies",
+          "service-discovery"
+        ]
+      },
+      {
+        "id": "16",
+        "num": "16",
+        "title": "Kubernetes Storage & Workloads",
+        "subtopics": [
+          "persistent-volumes",
+          "pvcs",
+          "statefulsets",
+          "daemonsets",
+          "jobs",
+          "cronjobs"
+        ]
+      },
+      {
+        "id": "17",
+        "num": "17",
+        "title": "Kubernetes Operations",
+        "subtopics": [
+          "kubectl",
+          "resource-requests-limits",
+          "probes",
+          "autoscaling",
+          "helm",
+          "cluster-administration",
+          "upgrades",
+          "troubleshooting"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-7",
+    "phaseNum": "PHASE 7",
+    "title": "OBSERVABILITY & RELIABILITY",
+    "description": "The three pillars of observability (logs, metrics, traces), Prometheus & Grafana stacks, and SRE principles.",
+    "chapters": [
+      {
+        "id": "18",
+        "num": "18",
+        "title": "Observability",
+        "subtopics": [
+          "logging",
+          "metrics",
+          "tracing",
+          "structured-logs",
+          "dashboards",
+          "alerting-obs",
+          "health-checks",
+          "opentelemetry"
+        ]
+      },
+      {
+        "id": "19",
+        "num": "19",
+        "title": "Monitoring Stack",
+        "subtopics": [
+          "prometheus",
+          "grafana",
+          "alerting-stack",
+          "cloud-monitoring-stack",
+          "log-aggregation"
+        ]
+      },
+      {
+        "id": "20",
+        "num": "20",
+        "title": "Reliability & SRE Fundamentals",
+        "subtopics": [
+          "availability",
+          "reliability",
+          "slis",
+          "slos",
+          "slas",
+          "error-budgets",
+          "incident-management",
+          "capacity-planning",
+          "disaster-recovery",
+          "backup-restore"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-8",
+    "phaseNum": "PHASE 8",
+    "title": "DEVSECOPS",
+    "description": "Shifting security left, automated code scanning (SAST/DAST), container vulnerability auditing, and SBOM generation.",
+    "chapters": [
+      {
+        "id": "21",
+        "num": "21",
+        "title": "DevSecOps",
+        "subtopics": [
+          "secure-cicd",
+          "sast",
+          "dast",
+          "dependency-scanning",
+          "container-scanning",
+          "secret-scanning",
+          "supply-chain-security",
+          "sbom",
+          "image-signing",
+          "runtime-security",
+          "security-policies"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-9",
+    "phaseNum": "PHASE 9",
+    "title": "PRODUCTION & ADVANCED DEVOPS",
+    "description": "Runbooks, incident postmortems, multi-region high availability, and internal developer platforms (IDPs).",
+    "chapters": [
+      {
+        "id": "22",
+        "num": "22",
+        "title": "Production Operations",
+        "subtopics": [
+          "incident-response",
+          "troubleshooting-prod",
+          "runbooks",
+          "change-management",
+          "on-call",
+          "postmortems",
+          "dr-prod",
+          "business-continuity"
+        ]
+      },
+      {
+        "id": "23",
+        "num": "23",
+        "title": "Advanced Infrastructure",
+        "subtopics": [
+          "high-availability",
+          "auto-scaling-adv",
+          "multi-az-arch",
+          "multi-region-concepts",
+          "service-discovery-adv",
+          "distributed-systems-basics",
+          "cost-optimization"
+        ]
+      },
+      {
+        "id": "24",
+        "num": "24",
+        "title": "Platform Engineering",
+        "subtopics": [
+          "internal-developer-platforms",
+          "self-service-infrastructure",
+          "golden-paths",
+          "infra-templates",
+          "developer-experience",
+          "platform-automation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "phase-10",
+    "phaseNum": "PHASE 10",
+    "title": "ENGINEERING & DELIVERY PRACTICES",
+    "description": "SDLC governance, Agile delivery, code reviews, documentation standards, and operational ownership.",
+    "chapters": [
+      {
+        "id": "25",
+        "num": "25",
+        "title": "Software Engineering Practices",
+        "subtopics": [
+          "sdlc",
+          "agile-scrum",
+          "automated-testing",
+          "code-review-practices",
+          "release-management",
+          "documentation",
+          "collaboration",
+          "operational-ownership"
+        ]
+      }
+    ]
+  }
+]

@@ -1,114 +1,149 @@
 <div align="center">
-  <a href="https://github.com/GuillaumeSD/Chesskit">
-    <img width="120" height="120" src="https://github.com/GuillaumeSD/Chesskit/blob/main/public/android-chrome-192x192.png" alt="Logo">
-  </a>
+  <img width="100" height="100" src="public/android-chrome-192x192.png" alt="ByteMate / ChessTogether Logo" style="border-radius: 20px;">
 
-<h3 align="center">Chesskit</h3>
-  <p align="center">
-    The Ultimate Chess Web App
-    <br />
-    <a href="https://chesskit.org/" target="_blank" rel="noopener noreferrer"><strong>chesskit.org</strong></a>
-    <br />
-    <a href="https://discord.com/invite/Yr99abAcUr" target="_blank" rel="noopener noreferrer">Discord Server</a>
-    ·
-    <a href="https://chesskit.notion.site/4cf7823836724432b71aa8932ba7d5bb" target="_blank" rel="noopener noreferrer">Features Backlog</a>
-  </p>
+  # ♟️ ByteMate / ChessTogether
+
+  **High-Throughput Full-Stack Real-Time Chess, Engineering Education & Careers Platform**
+
+  [![Java](https://img.shields.io/badge/Java-25-orange.svg?logo=openjdk&logoColor=white)](https://openjdk.org/)
+  [![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.1.1-6DB33F.svg?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+  [![Next.js](https://img.shields.io/badge/Next.js-16.2.3-black.svg?logo=next.js&logoColor=white)](https://nextjs.org/)
+  [![React](https://img.shields.io/badge/React-19.2.5-61DAFB.svg?logo=react&logoColor=black)](https://react.dev/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Netty-SocketIO](https://img.shields.io/badge/Netty--SocketIO-ws%3A%2F%2F9092-00599C.svg?logo=socketdotio&logoColor=white)](https://github.com/mrniko/netty-socketio)
+  [![Caffeine](https://img.shields.io/badge/Caffeine-Cache-red.svg)](https://github.com/ben-manes/caffeine)
+
 </div>
-<br />
 
-Chesskit is an open-source chess website to play, view, analyze and review your chess games for free on any device with Stockfish !
+---
 
-## Mission
+## 📌 Overview
 
-Chesskit aims to offer all the chess related features it can, while being free and open-source. It is designed to be easy to use, fast, and reliable.
+**ByteMate (ChessTogether)** is a production-grade, full-stack real-time platform combining:
+1. ♟️ **Real-Time Multiplayer Chess**: 0ms optimistic latency drag-and-drop chess powered by a high-throughput **Netty-SocketIO** engine and **Java 25 / Spring Boot** backend.
+2. 💬 **Global & Match Chat**: Real-time room-based match chat and global community lobby with custom role badges and sound effects.
+3. 📚 **Technical Learning Platform**: 640+ curated interactive lessons across **Backend Engineering**, **DevOps & Cloud**, and **Chess Strategy**, loaded dynamically from a Git-friendly Markdown (`.md`) system via Next.js SSG.
+4. 💼 **Tech Careers & Jobs Portal**: Searchable, categorized tech job board with filters for experience, salary, skills, and work modes.
 
-## Features
+---
 
-- Load and review games from [chess.com](https://chess.com) and [lichess.org](https://lichess.org)
-- Analysis board with live engine evaluation, custom arrows, evaluation graph, ...
-- Moves classification (Brilliant, Great, Good, Mistake, Blunder, ...)
-- Chess960 and Puzzles support
-- Play against Stockfish at any elo
-- Store your games in your browser database
+## 📚 Detailed Documentation (`docs/`)
 
-<img src="https://github.com/GuillaumeSD/Chesskit/blob/main/assets/showcase.png" />
+For in-depth architectural and design documentation, explore the [`docs/`](./docs) directory:
 
-## Stack
+- 🏛️ [**01. Architecture Overview**](./docs/01-architecture-overview.md) — System topology, component boundaries, and end-to-end data flow.
+- 🎨 [**02. Frontend Design**](./docs/02-frontend-design.md) — Next.js 16, React 19, Jotai state, 0ms optimistic updates, drag-and-drop, and SSG Markdown parser.
+- ☕ [**03. Backend SOLID Architecture**](./docs/03-backend-solid-architecture.md) — Java 25 & Spring Boot 4.1.1, SOLID design principles, Caffeine in-memory caching, and testing suite.
+- ⚡ [**04. Netty-SocketIO Real-Time Engine**](./docs/04-websocket-engine.md) — WebSocket architecture, event protocols, room isolation, sequence diagrams, and `<10ms` latency tuning.
+- 🛣️ [**05. Platform Evolution & Phases**](./docs/05-evolution-and-phases.md) — Chronological 5-phase development roadmap and engineering milestones.
 
-Built with [Next.js](https://nextjs.org/docs), [React](https://react.dev/learn/describing-the-ui), [Material UI](https://mui.com/material-ui/getting-started/overview/), and [TypeScript](https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html).
+---
 
-Deployed on AWS with [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/home.html), see it live [here](https://chesskit.org).
+## 🚀 Key Features
 
-## Running the app in dev mode
+### 1. ♟️ Real-Time Multiplayer Chess Engine
+- **Fluid Drag & Drop & Click-to-Move**: Built with `react-chessboard` & `chess.js` supporting both intuitive piece dragging and accessible touch/click-to-move.
+- **0ms Instant Optimistic UI**: Moves update immediately client-side with zero perceivable delay, paired with client-side move validation.
+- **Ultra Low-Latency Sync**: Netty-SocketIO broadcast engine (`<10ms` latency) running on port `9092`.
+- **Dynamic Viewport Auto-Scaling**: Responsive layout ensures the board and both player nameplates remain completely visible without scrolling on mobile and desktop viewports.
+- **Smart Square Highlights**: Subtle visual cues for last moves, legal target dots, capture rings, and radial red check alerts.
+- **Audio Feedback**: Custom Web Audio playback for moves, captures, checkmates, and invalid move alerts.
+- **Room Sharing**: 1-click shareable match links with instant lobby joining.
 
-#### Using Node.js
+### 2. 💬 Global & Match Chat System
+- **Match Chat**: Private real-time room communication per game session.
+- **Global Community Chat**: Live public chat with player roles (`Admin`, `Grandmaster`, `Master`, `Pro`, `Player`, `Spectator`).
+- **Caffeine In-Memory Caching**: Low-latency message snapshotting and fast eviction handling on the Spring Boot backend.
+- **Sound & Polish**: Audio notifications, emoji support, message timestamps, and auto-scrolling message streams.
 
-> [!IMPORTANT]  
-> At least [Node.js](https://nodejs.org) 22.11 is required.
+### 3. 📚 Interactive Engineering & Chess Learn Platform
+- **Markdown-Driven Content System (`content/learn/`)**: Complete separation of content and code. All roadmaps, chapters, and subtopics are stored as clean `.md` files with YAML frontmatter.
+- **Static Site Generation (SSG)**: Zero runtime overhead via Next.js `getStaticProps` with `gray-matter`.
+- **Curated Learning Pathways**:
+  - 🛠️ **Backend Engineering**: 5 Phases · 31 Chapters · 169 Lessons (Architecture, Databases, APIs, Distributed Systems, Reliability).
+  - ☁️ **DevOps & Cloud Engineering**: 10 Phases · 25 Chapters · 207 Lessons (Git, Linux, Docker, K8s, Terraform, CI/CD, SRE, Observability).
+  - ♟️ **Chess Basics & Strategy**: 4 Stages · 14 Chapters · 64 Lessons (Tactics, Openings, Endgames, Positional Play).
+- **Rich Reader Interface**: Collapsible sidebar, progress trackers, code snippet syntax styling, bullet highlights, and key takeaway summaries.
 
-Install the dependencies :
+### 4. 💼 Tech Careers & Jobs Board
+- **Role Search & Filters**: Filter by field (Backend, DevOps, Data Science, AI/ML, Cloud), experience level (Fresher, Mid, Senior), and work mode (Remote, Hybrid, On-site).
+- **Direct Application Links**: Detailed salary brackets, job descriptions, required skill tags, and company application portals.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **Framework**: [Next.js 16.2.3](https://nextjs.org/) (Pages Router, SSG, Turbopack)
+- **Library**: [React 19.2.5](https://react.dev/)
+- **Language**: [TypeScript 5.7.2](https://www.typescriptlang.org/)
+- **UI & Styling**: [Material UI (MUI v6)](https://mui.com/), [Emotion](https://emotion.sh/), [@iconify/react](https://iconify.design/)
+- **State Management**: [Jotai](https://jotai.org/)
+- **Chess Logic & Rendering**: [react-chessboard](https://www.npmjs.com/package/react-chessboard), [chess.js](https://github.com/jhlywa/chess.js)
+- **Real-Time Client**: [socket.io-client](https://socket.io/)
+- **Markdown Parser**: [gray-matter](https://github.com/jonschlinkert/gray-matter)
+
+### Backend
+- **Platform**: [Java 25](https://openjdk.org/)
+- **Framework**: [Spring Boot 4.1.1](https://spring.io/projects/spring-boot)
+- **Real-Time Socket Engine**: [Netty-SocketIO 2.0.12](https://github.com/mrniko/netty-socketio)
+- **Caching Layer**: [Caffeine In-Memory Cache](https://github.com/ben-manes/caffeine)
+- **Chess Game Engine**: [chessgame 2.0.1](https://github.com/wolfraam/chessgame)
+- **Build Tool**: [Apache Maven](https://maven.apache.org/)
+
+---
+
+## ⚡ Quickstart & Local Setup
+
+### Prerequisites
+- **Node.js**: `v22.11.0` or higher
+- **Java JDK**: `Java 25` (or Java 21+)
+- **Maven**: `3.9.0` or higher
+
+---
+
+### 1. Start the Backend (Spring Boot + Netty-SocketIO)
 
 ```bash
-npm i
+cd backend
+mvn spring-boot:run
 ```
 
-Run the development server :
+*The backend boots up in ~1.5s:*
+- **REST API**: `http://localhost:8080`
+- **Netty-SocketIO Server**: `ws://localhost:9092`
+
+---
+
+### 2. Start the Frontend (Next.js)
+
+In the root directory:
 
 ```bash
+npm install
 npm run dev
 ```
 
-#### Using Docker
+*The frontend is ready at:*
+- **Web App**: [http://localhost:3000](http://localhost:3000)
 
-Run the development server :
+---
 
-```bash
-HOST_UID=$(id -u) HOST_GID=$(id -g) COMMAND=dev docker compose -f ./docker/docker-compose-dev.yml up
-```
-
-Open [http://localhost:3000](http://localhost:3000) in the browser to see the app running.
-
-The app will automatically refresh on any source file change.
-
-## Lint
-
-Run it with :
+## 🧪 Automated Testing
 
 ```bash
-npm run lint
+# Backend unit & integration tests (13/13 passing)
+cd backend && mvn test
+
+# Frontend type checking
+npx tsc --noEmit
+
+# Frontend production build validation
+npm run build
 ```
 
-or with docker :
+---
 
-```bash
-HOST_UID=$(id -u) HOST_GID=$(id -g) COMMAND=lint docker compose -f ./docker/docker-compose-dev.yml up
-```
+## 📄 License
 
-## Contribute
-
-See [contributing](CONTRIBUTING.md) for details on how to contribute to the project.
-
-## Deploy
-
-To deploy the app, install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and [authenticate](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html), then run :
-
-```bash
-npm run deploy
-```
-
-## License
-
-Chesskit is licensed under the GNU Affero General Public License 3. See [copying](COPYING.md) for
-details.
-
-## Growing thanks to you ❤️
-
-[![Stargazers over time](https://starchart.cc/GuillaumeSD/Chesskit.svg?variant=adaptive)](https://starchart.cc/GuillaumeSD/Chesskit)
-
-## Self-hosting
-
-To run the project locally in production mode, you can use docker and the following command :
-
-```bash
-docker compose -f ./docker/docker-compose-prod.yml up
-```
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.

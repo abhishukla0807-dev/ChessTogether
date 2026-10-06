@@ -1,0 +1,224 @@
+{
+  "stages": [
+    {
+      "stageNum": "STAGE 1",
+      "stageTitle": "The Foundations",
+      "description": "Master the board, piece movements, special moves, and checkmate conditions.",
+      "chapterIds": [
+        "01",
+        "02",
+        "03",
+        "04"
+      ]
+    },
+    {
+      "stageNum": "STAGE 2",
+      "stageTitle": "Openings & Core Principles",
+      "description": "Learn center control, rapid piece development, and essential opening systems.",
+      "chapterIds": [
+        "05",
+        "06"
+      ]
+    },
+    {
+      "stageNum": "STAGE 3",
+      "stageTitle": "Tactics & Strategy",
+      "description": "Sharpen pattern recognition, tactical combinations, and positional planning.",
+      "chapterIds": [
+        "07",
+        "08",
+        "09"
+      ]
+    },
+    {
+      "stageNum": "STAGE 4",
+      "stageTitle": "Endgames & Mastery",
+      "description": "Convert advantages, calculate variations, and build a long-term improvement regimen.",
+      "chapterIds": [
+        "10",
+        "11",
+        "12",
+        "13",
+        "14"
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "id": "01",
+      "num": "01",
+      "title": "Chess Basics",
+      "description": "Understanding the battlefield, army composition, relative values, and notation.",
+      "subtopics": [
+        "board-coordinates",
+        "chess-pieces",
+        "piece-values",
+        "chess-notation"
+      ]
+    },
+    {
+      "id": "02",
+      "num": "02",
+      "title": "Piece Movements",
+      "description": "Detailed movement mechanics, capture rules, and unique strengths of all 6 pieces.",
+      "subtopics": [
+        "king-movement",
+        "queen-movement",
+        "rook-movement",
+        "bishop-movement",
+        "knight-movement",
+        "pawn-movement"
+      ]
+    },
+    {
+      "id": "03",
+      "num": "03",
+      "title": "Special Moves",
+      "description": "The 3 special rules that every chess player must know: Castling, En Passant, and Promotion.",
+      "subtopics": [
+        "castling",
+        "en-passant",
+        "pawn-promotion"
+      ]
+    },
+    {
+      "id": "04",
+      "num": "04",
+      "title": "Check & Checkmate",
+      "description": "The win conditions, check escape techniques, and the critical difference between Checkmate and Stalemate.",
+      "subtopics": [
+        "check",
+        "checkmate",
+        "stalemate",
+        "draw-rules"
+      ]
+    },
+    {
+      "id": "05",
+      "num": "05",
+      "title": "Opening Principles",
+      "description": "The fundamental rules of the opening: center control, piece development, king safety, and avoiding early blunders.",
+      "subtopics": [
+        "control-the-center",
+        "develop-pieces",
+        "king-safety",
+        "opening-mistakes"
+      ]
+    },
+    {
+      "id": "06",
+      "num": "06",
+      "title": "Essential Openings",
+      "description": "The most important classical opening systems for White and Black.",
+      "subtopics": [
+        "italian-game",
+        "ruy-lopez",
+        "sicilian-defense",
+        "french-defense",
+        "queens-gambit"
+      ]
+    },
+    {
+      "id": "07",
+      "num": "07",
+      "title": "Chess Tactics",
+      "description": "The tactical toolkit of champions: Forks, Pins, Skewers, Discovered Attacks, and Back Rank weaknesses.",
+      "subtopics": [
+        "fork",
+        "pin",
+        "skewer",
+        "discovered-attack",
+        "double-attack",
+        "back-rank"
+      ]
+    },
+    {
+      "id": "08",
+      "num": "08",
+      "title": "Strategic Thinking",
+      "description": "Positional mastery: Pawn structures, piece activity, open files, weak squares, and space advantages.",
+      "subtopics": [
+        "pawn-structure",
+        "piece-activity",
+        "open-files",
+        "weak-squares",
+        "space-advantage"
+      ]
+    },
+    {
+      "id": "09",
+      "num": "09",
+      "title": "Middlegame",
+      "description": "The heart of chess battle: Formulating plans, calculating exchanges, king attacks, and positional maneuvers.",
+      "subtopics": [
+        "planning",
+        "exchanges",
+        "attacking-the-king",
+        "positional-play"
+      ]
+    },
+    {
+      "id": "10",
+      "num": "10",
+      "title": "Endgame Fundamentals",
+      "description": "The technical phase where pawns queen and precise King activity decides the victor.",
+      "subtopics": [
+        "king-and-pawn",
+        "queen-endgames",
+        "rook-endgames",
+        "bishop-endgames",
+        "knight-endgames"
+      ]
+    },
+    {
+      "id": "11",
+      "num": "11",
+      "title": "Calculation & Visualization",
+      "description": "Developing a Grandmaster mind: Candidate moves, deep variations, and board visualization.",
+      "subtopics": [
+        "candidate-moves",
+        "variations",
+        "tactical-calculation",
+        "board-visualization"
+      ]
+    },
+    {
+      "id": "12",
+      "num": "12",
+      "title": "Practical Chess",
+      "description": "Over-the-board psychological skills: Clock management, blunder checks, and systematic game reviews.",
+      "subtopics": [
+        "time-management",
+        "blunder-prevention",
+        "game-analysis",
+        "post-game-review"
+      ]
+    },
+    {
+      "id": "13",
+      "num": "13",
+      "title": "Advanced Chess",
+      "description": "Master-level concepts: Positional sacrifices, opening preparation, and deep endgame technique.",
+      "subtopics": [
+        "advanced-tactics",
+        "advanced-strategy",
+        "opening-prep",
+        "positional-sacrifices",
+        "advanced-endgames"
+      ]
+    },
+    {
+      "id": "14",
+      "num": "14",
+      "title": "Chess Improvement",
+      "description": "The structured daily training regimen to reach master strength.",
+      "subtopics": [
+        "solve-puzzles",
+        "analyze-games",
+        "grandmaster-games",
+        "opening-repertoire",
+        "training-plan"
+      ]
+    }
+  ]
+}

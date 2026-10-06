@@ -1,12 +1,17 @@
 import {
   Box,
+  Button,
   Chip,
   CircularProgress,
-  Divider,
-  Grid2 as Grid,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
+  Snackbar,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { Icon } from "@iconify/react";
 import {
@@ -16,21 +21,25 @@ import {
   useRef,
   useState,
 } from "react";
-import { Chess } from "chess.js";
+import { Chess, Square } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import type { CustomPieces, Piece } from "react-chessboard/dist/chessboard/types";
 import { useAtomValue } from "jotai";
 import { pieceSetAtom } from "@/components/board/states";
 import { useRouter } from "next/router";
 import { getSocket } from "@/lib/socket";
-import { playMoveSound, playCaptureSound, playIllegalMoveSound } from "@/lib/sounds";
+import {
+  playMoveSound,
+  playCaptureSound,
+  playIllegalMoveSound,
+} from "@/lib/sounds";
 
 const PIECE_CODES: Piece[] = [
   "wP", "wB", "wN", "wR", "wQ", "wK",
   "bP", "bB", "bN", "bR", "bQ", "bK",
 ];
 
-// ── types ──────────────────────────────────────────────────────────────
+// ── Types ──────────────────────────────────────────────────────────────
 
 interface SessionState {
   id: string;
@@ -39,13 +48,12 @@ interface SessionState {
   moves: string[];
   turn: "white" | "black";
   createdAt: number;
-}
-
-interface MoveEntry {
-  player: "white" | "black";
-  name: string;
-  move: string;
-  san: string;
+  // ── Server-authoritative chess clocks (added for lag compensation) ──
+  whiteTimeMs: number;   // remaining ms on White's clock
+  blackTimeMs: number;   // remaining ms on Black's clock
+  lastMoveAt: number;    // server epoch-ms of last move (for live countdown)
+  flagged: boolean;      // true if a player has run out of time
+  activePlayerTimeMs: number; // live remaining time for the player to move
 }
 
 interface Props {
@@ -53,7 +61,7 @@ interface Props {
   playerRole: "white" | "black";
 }
 
-// ── helpers ─────────────────────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────────
 
 function buildBoardFromMoves(moves: string[]): Chess {
   const chess = new Chess();
@@ -80,62 +88,36 @@ function buildBoardFromMoves(moves: string[]): Chess {
   return chess;
 }
 
-function movesToLog(
-  moves: string[],
-  whiteName: string,
-  blackName: string
-): MoveEntry[] {
-  const chess = new Chess();
-  const entries: MoveEntry[] = [];
-
-  for (let i = 0; i < moves.length; i++) {
-    const m = moves[i];
-    if (!m) continue;
-    const player: "white" | "black" = i % 2 === 0 ? "white" : "black";
-    try {
-      let result: any = null;
-      if (m.length >= 4) {
-        const from = m.slice(0, 2);
-        const to = m.slice(2, 4);
-        const promotion = m.length === 5 ? m[4] : undefined;
-        result = chess.move({ from, to, promotion });
-      }
-      if (!result) {
-        result = chess.move(m);
-      }
-      entries.push({
-        player,
-        name: player === "white" ? whiteName : blackName,
-        move: m,
-        san: result?.san ?? m,
-      });
-    } catch {
-      entries.push({
-        player,
-        name: player === "white" ? whiteName : blackName,
-        move: m,
-        san: m,
-      });
-    }
+function formatClock(ms: number | undefined): string {
+  if (ms === undefined || isNaN(ms)) return "05:00";
+  const safeMs = Math.max(0, ms);
+  const totalSeconds = Math.floor(safeMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (totalSeconds < 10 && safeMs > 0) {
+    const tenths = Math.floor((safeMs % 1000) / 100);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}.${tenths}`;
   }
-
-  return entries;
+  return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
 
-// ── component ────────────────────────────────────────────────────────────
+// ── Component ──────────────────────────────────────────────────────────
 
 export default function MultiplayerGame({ sessionId, playerRole }: Props) {
   const router = useRouter();
+  const theme = useTheme();
+  const dark = theme.palette.mode === "dark";
+
   const [session, setSession] = useState<SessionState | null>(null);
-  const [inputValue, setInputValue] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
   const [fetchError, setFetchError] = useState("");
-  const logContainerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [selectedSquare, setSelectedSquare] = useState<Square | null>(null);
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [boardFlipped, setBoardFlipped] = useState(false);
+  const [gameOverDismissed, setGameOverDismissed] = useState(false);
+
   const prevMovesCountRef = useRef<number>(-1);
 
-  // Save active session for instant "Go back" from Chat
+  // Save active session for quick return from other tabs
   useEffect(() => {
     if (sessionId && playerRole) {
       try {
@@ -149,7 +131,7 @@ export default function MultiplayerGame({ sessionId, playerRole }: Props) {
     }
   }, [sessionId, playerRole]);
 
-  // ── Reliable window resize / fullscreen observer ──────────────────
+  // ── Responsive window observer ────────────────────────────────────────
   const [windowDimensions, setWindowDimensions] = useState({
     width: typeof window !== "undefined" ? window.innerWidth : 1000,
     height: typeof window !== "undefined" ? window.innerHeight : 800,
@@ -164,18 +146,10 @@ export default function MultiplayerGame({ sessionId, playerRole }: Props) {
     };
     handleResize();
     window.addEventListener("resize", handleResize);
-    window.addEventListener("fullscreenchange", handleResize);
-    window.addEventListener("webkitfullscreenchange", handleResize);
-    window.addEventListener("orientationchange", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("fullscreenchange", handleResize);
-      window.removeEventListener("webkitfullscreenchange", handleResize);
-      window.removeEventListener("orientationchange", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // ── Piece set (guaranteed fallback to 'maestro') ───────────────────
+  // ── Piece set ─────────────────────────────────────────────────────────
   const pieceSetAtomVal = useAtomValue(pieceSetAtom);
   const activePieceSet = pieceSetAtomVal || "maestro";
 
@@ -191,7 +165,6 @@ export default function MultiplayerGame({ sessionId, playerRole }: Props) {
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
-              pointerEvents: "none",
             }}
           />
         );
@@ -200,22 +173,24 @@ export default function MultiplayerGame({ sessionId, playerRole }: Props) {
     [activePieceSet]
   );
 
-  // ── Board size (fits comfortably within viewport without page scrolling) ──
+  // ── Responsive Board Size (Guarantees both player names are always visible) ──
   const boardSize = useMemo(() => {
     const w = windowDimensions.width;
     const h = windowDimensions.height;
-    if (w < 900) {
-      return Math.max(220, Math.min(w - 24, h - 220));
-    }
-    // On desktop:
-    // Vertical budget: Total viewport height (h) minus NavBar (~50px), player labels (~80px), margins (~40px)
-    const maxFromHeight = h - 170;
-    // Horizontal budget: viewport width (w) minus CLI panel (310px), gap (16px), margins/padding (~48px)
-    const maxFromWidth = w - 310 - 16 - 48;
-    return Math.max(260, Math.min(maxFromWidth, maxFromHeight, 560));
+
+    // Overhead budget:
+    // NavBar (~54px) + Top Player Bar (~44px) + Bottom Player Bar (~44px) + Spacing/Paddings (~30px)
+    const verticalOverhead = 172;
+    const horizontalOverhead = w < 600 ? 24 : 48;
+
+    const maxFromHeight = h - verticalOverhead;
+    const maxFromWidth = w - horizontalOverhead;
+
+    const size = Math.floor(Math.min(maxFromWidth, maxFromHeight));
+    return Math.max(220, Math.min(size, 580));
   }, [windowDimensions]);
 
-  // ── Socket.io WebSocket Connection (Instant Real-time Sync) ───────
+  // ── Socket.io WebSocket Connection (Instant Real-time Sync) ───────────
   useEffect(() => {
     let activeSocket: any = null;
 
@@ -227,6 +202,11 @@ export default function MultiplayerGame({ sessionId, playerRole }: Props) {
         setSession(updatedSession);
         setFetchError("");
       });
+
+      // ── Timeout / Flag event: a player ran out of time ──
+      activeSocket.on("game-flagged", (flaggedSession: SessionState) => {
+        setSession({ ...flaggedSession, flagged: true });
+      });
     };
 
     setupSocket();
@@ -234,11 +214,12 @@ export default function MultiplayerGame({ sessionId, playerRole }: Props) {
     return () => {
       if (activeSocket) {
         activeSocket.off("session-updated");
+        activeSocket.off("game-flagged");
       }
     };
   }, [sessionId]);
 
-  // ── Background Poll fallback ─────────────────────────────────────────
+  // ── Background Poll Fallback ──────────────────────────────────────────
   const fetchSession = useCallback(async () => {
     try {
       const res = await fetch(`/api/sessions/${sessionId}`);
@@ -260,142 +241,306 @@ export default function MultiplayerGame({ sessionId, playerRole }: Props) {
     return () => clearInterval(interval);
   }, [fetchSession]);
 
-  // ── Board state from moves ──────────────────────────────────────────
+  // ── Board State from Moves ────────────────────────────────────────────
   const chess = useMemo(
     () => buildBoardFromMoves(session?.moves ?? []),
     [session?.moves]
   );
 
-  const moveLog = useMemo(
-    () =>
-      session
-        ? movesToLog(
-            session.moves,
-            session.whiteName,
-            session.blackName
-          )
-        : [],
-    [session]
-  );
+  const isMyTurn = session ? session.turn === playerRole : false;
+  const isGameOver = chess.isGameOver() || Boolean(session?.flagged);
 
-  // Play move sounds (capture vs normal move) whenever moves count increases
+  // ── Live Chess Clock (Synchronized with Server Lag Compensation) ──────
+  const [now, setNow] = useState<number>(Date.now());
+
+  useEffect(() => {
+    if (!session || isGameOver) return;
+    const timer = setInterval(() => {
+      setNow(Date.now());
+    }, 200);
+    return () => clearInterval(timer);
+  }, [session, isGameOver]);
+
+  const { whiteRemainingMs, blackRemainingMs } = useMemo(() => {
+    const defaultMs = 5 * 60 * 1000;
+    if (!session) return { whiteRemainingMs: defaultMs, blackRemainingMs: defaultMs };
+
+    const rawWhite = session.whiteTimeMs ?? defaultMs;
+    const rawBlack = session.blackTimeMs ?? defaultMs;
+    const lastMove = session.lastMoveAt || session.createdAt || now;
+
+    if (isGameOver) {
+      return { whiteRemainingMs: rawWhite, blackRemainingMs: rawBlack };
+    }
+
+    const elapsed = Math.max(0, now - lastMove);
+    if (session.turn === "white") {
+      return {
+        whiteRemainingMs: Math.max(0, rawWhite - elapsed),
+        blackRemainingMs: rawBlack,
+      };
+    } else {
+      return {
+        whiteRemainingMs: rawWhite,
+        blackRemainingMs: Math.max(0, rawBlack - elapsed),
+      };
+    }
+  }, [session, now, isGameOver]);
+
+  // Audio feedback when opponent makes a move
   useEffect(() => {
     if (session?.moves) {
       const currentCount = session.moves.length;
       if (prevMovesCountRef.current >= 0 && currentCount > prevMovesCountRef.current) {
+        const lastMoveStr = session.moves[session.moves.length - 1];
+        const tempGame = buildBoardFromMoves(session.moves.slice(0, -1));
         try {
-          const lastEntry = moveLog[moveLog.length - 1];
-          if (lastEntry?.san?.includes("x")) {
+          const moveRes = tempGame.move(lastMoveStr);
+          if (moveRes?.captured) {
             playCaptureSound();
           } else {
             playMoveSound();
           }
-        } catch (e) {
-          console.error("Audio playback error:", e);
+        } catch {
+          playMoveSound();
         }
       }
       prevMovesCountRef.current = currentCount;
     }
-  }, [session?.moves, moveLog]);
+  }, [session?.moves]);
 
-  // ── Submit a move ───────────────────────────────────────────────────
-  const handleSubmit = useCallback(async () => {
-    const raw = inputValue.trim();
-    if (!raw || !session) return;
+  // ── Execute Move Instantly (Optimistic UI + WebSocket + REST) ─────────
+  const executeMove = useCallback(
+    (source: Square, target: Square): boolean => {
+      if (!session || !isMyTurn || isGameOver) return false;
 
-    // Guard: it must be this player's turn
-    if (session.turn !== playerRole) {
-      setSubmitError("It's not your turn yet.");
-      playIllegalMoveSound();
-      return;
-    }
+      const testGame = buildBoardFromMoves(session.moves);
 
-    // Local pre-validation for 0ms instant response
-    const testChess = buildBoardFromMoves(session.moves);
-    let moveResult = null;
-    if (raw.length >= 4) {
-      moveResult = testChess.move({
-        from: raw.slice(0, 2),
-        to: raw.slice(2, 4),
-        promotion: raw.length === 5 ? raw[4].toLowerCase() : undefined,
-      });
-    }
-    if (!moveResult) {
+      // Check if it's a pawn promotion
+      const pieceOnSource = testGame.get(source);
+      const isPromotion =
+        pieceOnSource?.type === "p" &&
+        ((pieceOnSource.color === "w" && target[1] === "8") ||
+          (pieceOnSource.color === "b" && target[1] === "1"));
+
+      let moveResult: any = null;
       try {
-        moveResult = testChess.move(raw);
+        moveResult = testGame.move({
+          from: source,
+          to: target,
+          promotion: isPromotion ? "q" : undefined,
+        });
       } catch {
         moveResult = null;
       }
-    }
 
-    if (!moveResult) {
-      setSubmitError(`Invalid move: "${raw}"`);
-      playIllegalMoveSound();
-      return;
-    }
-
-    const parsedMove =
-      moveResult.from + moveResult.to + (moveResult.promotion ?? "");
-    const nextTurn = session.turn === "white" ? "black" : "white";
-
-    // ── Instant 0ms Optimistic UI Update ──
-    setSession((prev) =>
-      prev
-        ? {
-            ...prev,
-            moves: [...prev.moves, parsedMove],
-            turn: nextTurn,
-          }
-        : prev
-    );
-    setInputValue("");
-    setSubmitting(true);
-    setSubmitError("");
-    inputRef.current?.focus();
-
-    // ── Instant WebSocket Emit (<10ms) ──
-    getSocket().then((sock) => {
-      if (sock) {
-        sock.emit("play-move", {
-          sessionId,
-          move: parsedMove,
-          player: playerRole,
-        });
+      if (!moveResult) {
+        playIllegalMoveSound();
+        return false;
       }
-    });
 
-    try {
-      const res = await fetch(`/api/sessions/${sessionId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ move: parsedMove, player: playerRole }),
+      // Valid move!
+      const parsedMove =
+        moveResult.from + moveResult.to + (moveResult.promotion ?? "");
+      const nextTurn = session.turn === "white" ? "black" : "white";
+
+      // Instant sound
+      if (moveResult.captured) {
+        playCaptureSound();
+      } else {
+        playMoveSound();
+      }
+
+      // Clear selection
+      setSelectedSquare(null);
+
+      // 1. Instant 0ms Optimistic UI Update
+      setSession((prev) =>
+        prev
+          ? {
+              ...prev,
+              moves: [...prev.moves, parsedMove],
+              turn: nextTurn,
+            }
+          : prev
+      );
+
+      // 2. Instant WebSocket Broadcast (<10ms)
+      // clientSentAt is stamped HERE (before the async socket call)
+      // so the server can measure one-way latency and credit it back to our clock.
+      const clientSentAt = Date.now();
+      getSocket().then((sock) => {
+        if (sock) {
+          sock.emit("play-move", {
+            sessionId,
+            move: parsedMove,
+            player: playerRole,
+            clientSentAt,   // ← lag compensation timestamp
+          });
+        }
       });
 
-      const data = await res.json();
+      // 3. Background REST sync
+      fetch(`/api/sessions/${sessionId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ move: parsedMove, player: playerRole, clientSentAt }),
+      }).then(async (res) => {
+        if (!res.ok) {
+          fetchSession(); // Rollback if server rejected
+        }
+      }).catch(() => {
+        // WebSocket or polling will sync
+      });
 
-      if (!res.ok) {
-        setSubmitError(data.error ?? "Invalid move.");
-        playIllegalMoveSound();
-        fetchSession(); // Rollback to server truth
-      } else {
-        setSession(data as SessionState);
-      }
-    } catch {
-      // Fallback silently if offline (WebSocket or polling will recover)
-    } finally {
-      setSubmitting(false);
-      inputRef.current?.focus();
-    }
-  }, [inputValue, session, sessionId, playerRole, fetchSession]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") handleSubmit();
+      return true;
     },
-    [handleSubmit]
+    [session, isMyTurn, isGameOver, sessionId, playerRole, fetchSession]
   );
 
-  // ── Loading state ───────────────────────────────────────────────────
+  // ── Drag and Drop Handler ─────────────────────────────────────────────
+  const onPieceDrop = useCallback(
+    (sourceSquare: Square, targetSquare: Square, piece: Piece): boolean => {
+      if (!isMyTurn || isGameOver) {
+        playIllegalMoveSound();
+        return false;
+      }
+
+      const pieceColor = piece.startsWith("w") ? "white" : "black";
+      if (pieceColor !== playerRole) {
+        playIllegalMoveSound();
+        return false;
+      }
+
+      return executeMove(sourceSquare, targetSquare);
+    },
+    [isMyTurn, isGameOver, playerRole, executeMove]
+  );
+
+  // ── Click-to-Move Handler (Touch / Click accessibility) ────────────────
+  const onSquareClick = useCallback(
+    (square: Square) => {
+      if (!isMyTurn || isGameOver) return;
+
+      const pieceOnSquare = chess.get(square);
+      const isOwnPiece =
+        pieceOnSquare &&
+        pieceOnSquare.color === (playerRole === "white" ? "w" : "b");
+
+      if (selectedSquare) {
+        if (selectedSquare === square) {
+          setSelectedSquare(null);
+          return;
+        }
+
+        if (isOwnPiece) {
+          setSelectedSquare(square);
+          return;
+        }
+
+        const success = executeMove(selectedSquare, square);
+        if (!success) {
+          setSelectedSquare(null);
+        }
+      } else {
+        if (isOwnPiece) {
+          setSelectedSquare(square);
+        }
+      }
+    },
+    [isMyTurn, isGameOver, chess, playerRole, selectedSquare, executeMove]
+  );
+
+  // ── Square Highlights (Last Move, Selected Piece, Legal Moves, Check) ──
+  const customSquareStyles = useMemo(() => {
+    const styles: Record<string, React.CSSProperties> = {};
+
+    // 1. Highlight last move (from & to squares)
+    if (session?.moves && session.moves.length > 0) {
+      const lastMove = session.moves[session.moves.length - 1];
+      if (lastMove.length >= 4) {
+        const from = lastMove.slice(0, 2);
+        const to = lastMove.slice(2, 4);
+        styles[from] = {
+          backgroundColor: dark
+            ? "rgba(59, 154, 198, 0.25)"
+            : "rgba(59, 154, 198, 0.2)",
+        };
+        styles[to] = {
+          backgroundColor: dark
+            ? "rgba(59, 154, 198, 0.35)"
+            : "rgba(59, 154, 198, 0.3)",
+        };
+      }
+    }
+
+    // 2. Highlight King in check
+    if (chess.inCheck()) {
+      const turnColor = chess.turn();
+      const board = chess.board();
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = board[r][c];
+          if (p && p.type === "k" && p.color === turnColor) {
+            const file = String.fromCharCode(97 + c);
+            const rank = (8 - r).toString();
+            const kingSquare = `${file}${rank}`;
+            styles[kingSquare] = {
+              background:
+                "radial-gradient(circle, rgba(239, 68, 68, 0.9) 0%, rgba(239, 68, 68, 0.35) 60%, transparent 75%)",
+              borderRadius: "50%",
+            };
+          }
+        }
+      }
+    }
+
+    // 3. Highlight selected piece square and its legal destination squares
+    if (selectedSquare) {
+      styles[selectedSquare] = {
+        backgroundColor: "rgba(59, 154, 198, 0.45)",
+        boxShadow: "inset 0 0 8px rgba(59, 154, 198, 0.8)",
+      };
+
+      try {
+        const legalMoves = chess.moves({
+          square: selectedSquare,
+          verbose: true,
+        });
+
+        for (const m of legalMoves) {
+          const target = m.to;
+          const isCapture = Boolean(m.captured);
+          styles[target] = isCapture
+            ? {
+                background:
+                  "radial-gradient(circle, transparent 60%, rgba(239, 68, 68, 0.6) 61%)",
+                borderRadius: "50%",
+              }
+            : {
+                background:
+                  "radial-gradient(circle, rgba(59, 154, 198, 0.6) 26%, transparent 28%)",
+              };
+        }
+      } catch {
+        // Ignore
+      }
+    }
+
+    return styles;
+  }, [session?.moves, chess, selectedSquare, dark]);
+
+  // ── Copy Link Action ──────────────────────────────────────────────────
+  const copyShareLink = () => {
+    const base = typeof window !== "undefined" ? window.location.origin : "";
+    const link = `${base}/play?session=${sessionId}&role=${
+      playerRole === "white" ? "black" : "white"
+    }&joined=1`;
+    navigator.clipboard.writeText(link);
+    setCopiedLink(true);
+  };
+
+  // ── Loading & Error States ────────────────────────────────────────────
   if (!session && !fetchError) {
     return (
       <Box
@@ -403,13 +548,14 @@ export default function MultiplayerGame({ sessionId, playerRole }: Props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "80vh",
+          height: "100%",
+          flex: 1,
           gap: 2,
         }}
       >
         <CircularProgress color="primary" />
-        <Typography sx={{ color: "#7a8592" }}>
-          Connecting to session…
+        <Typography sx={{ color: "text.secondary" }}>
+          Connecting to match…
         </Typography>
       </Box>
     );
@@ -420,422 +566,478 @@ export default function MultiplayerGame({ sessionId, playerRole }: Props) {
       <Box
         sx={{
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "80vh",
+          height: "100%",
+          flex: 1,
+          gap: 2,
         }}
       >
-        <Typography sx={{ color: "salmon" }}>{fetchError}</Typography>
+        <Typography sx={{ color: "error.main", fontWeight: 600 }}>
+          {fetchError}
+        </Typography>
+        <Button variant="outlined" onClick={() => router.push("/play")}>
+          Back to Play
+        </Button>
       </Box>
     );
   }
 
   if (!session) return null;
 
-  const isMyTurn = session.turn === playerRole;
-  const opponentName =
-    playerRole === "white" ? session.blackName : session.whiteName;
-  const isGameOver = chess.isGameOver();
+  const currentBoardOrientation = boardFlipped
+    ? playerRole === "black"
+      ? "white"
+      : "black"
+    : playerRole === "black"
+    ? "black"
+    : "white";
 
-  const turnPrefix =
-    session.turn === "white"
-      ? `${session.whiteName} >> `
-      : `${session.blackName} >> `;
+  const topPlayerRole = currentBoardOrientation === "white" ? "black" : "white";
+  const bottomPlayerRole = currentBoardOrientation === "white" ? "white" : "black";
+
+  const topPlayerName =
+    topPlayerRole === "white" ? session.whiteName : session.blackName;
+  const bottomPlayerName =
+    bottomPlayerRole === "white" ? session.whiteName : session.blackName;
+
+  const isTopPlayerTurn = session.turn === topPlayerRole;
+  const isBottomPlayerTurn = session.turn === bottomPlayerRole;
+
+  const topPlayerTimeMs = topPlayerRole === "white" ? whiteRemainingMs : blackRemainingMs;
+  const bottomPlayerTimeMs = bottomPlayerRole === "white" ? whiteRemainingMs : blackRemainingMs;
 
   return (
-    <Grid
-      container
-      gap={2}
-      justifyContent="center"
-      alignItems="flex-start"
-      sx={{ mt: 1, maxWidth: "100%", overflowX: "hidden" }}
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        overflow: "hidden",
+        py: { xs: 0.5, sm: 1 },
+        px: { xs: 1, sm: 2 },
+      }}
     >
-      {/* ── Chess Board ── */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        {/* Black player label */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 0.5 }}>
-          <Box
-            sx={{
-              width: 32,
-              height: 32,
-              borderRadius: "50%",
-              backgroundColor: "#222",
-              border: "2px solid #555",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: 700,
-              fontSize: "0.8rem",
-              color: "#e8eaed",
-            }}
-          >
-            B
-          </Box>
-          <Typography
-            component="div"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              fontWeight: 600,
-              color: "#b0b8c1",
-            }}
-          >
-            {session.blackName}
-            {playerRole === "black" && (
-              <Chip
-                label="You"
-                size="small"
-                sx={{ ml: 1, fontSize: "0.7rem", height: 18 }}
-                color="primary"
-              />
-            )}
-          </Typography>
-        </Box>
-
-        {/* Board */}
+      {/* ── Centered Chess Arena (Board + Both Player Bars) ── */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: boardSize,
+          maxWidth: "100%",
+        }}
+      >
+        {/* ── Top Player Bar ── */}
         <Box
           sx={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            px: { xs: 0.5, sm: 1 },
+            py: 0.5,
+            mb: 0.5,
             borderRadius: "6px",
-            boxShadow: "0 2px 12px rgba(0,0,0,0.5)",
+            backgroundColor: isTopPlayerTurn
+              ? dark ? "rgba(59,154,198,0.12)" : "rgba(59,154,198,0.08)"
+              : "transparent",
+            transition: "all 0.2s ease",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 0 }}>
+            <Box
+              sx={{
+                width: 26,
+                height: 26,
+                borderRadius: "50%",
+                backgroundColor: topPlayerRole === "black" ? "#1e2022" : "#f1f3f5",
+                border: `2px solid ${topPlayerRole === "black" ? "#4a4d52" : "#cbd5e1"}`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 800,
+                fontSize: "0.72rem",
+                color: topPlayerRole === "black" ? "#f8fafc" : "#111827",
+                flexShrink: 0,
+              }}
+            >
+              {topPlayerRole === "black" ? "B" : "W"}
+            </Box>
+
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: { xs: "0.85rem", sm: "0.92rem" },
+                color: "text.primary",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                display: "flex",
+                alignItems: "center",
+                gap: 0.75,
+              }}
+            >
+              {topPlayerName}
+              {topPlayerRole === playerRole && (
+                <Chip
+                  label="You"
+                  size="small"
+                  color="primary"
+                  sx={{ height: 18, fontSize: "0.68rem", fontWeight: 700 }}
+                />
+              )}
+            </Typography>
+          </Box>
+
+          {/* Top Player Status, Clock & Quick Utilities */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, flexShrink: 0 }}>
+            {/* Top Player Clock Badge */}
+            <Box
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 0.5,
+                px: 1,
+                py: 0.25,
+                borderRadius: "6px",
+                fontFamily: "'Fira Code', 'JetBrains Mono', 'Consolas', monospace",
+                fontWeight: 700,
+                fontSize: { xs: "0.82rem", sm: "0.88rem" },
+                letterSpacing: "0.5px",
+                backgroundColor: isTopPlayerTurn
+                  ? topPlayerTimeMs < 30000
+                    ? "rgba(239, 68, 68, 0.2)"
+                    : dark
+                    ? "rgba(59, 154, 198, 0.2)"
+                    : "rgba(59, 154, 198, 0.12)"
+                  : dark
+                  ? "rgba(255, 255, 255, 0.06)"
+                  : "rgba(0, 0, 0, 0.05)",
+                color:
+                  topPlayerTimeMs < 30000 && isTopPlayerTurn
+                    ? "#ef4444"
+                    : isTopPlayerTurn
+                    ? "primary.main"
+                    : "text.secondary",
+                border: "1px solid",
+                borderColor: isTopPlayerTurn
+                  ? topPlayerTimeMs < 30000
+                    ? "rgba(239, 68, 68, 0.5)"
+                    : "primary.main"
+                  : "transparent",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <Icon icon="mdi:clock-outline" width={14} />
+              {formatClock(topPlayerTimeMs)}
+            </Box>
+
+            {isTopPlayerTurn && !isGameOver && (
+              <Typography
+                sx={{
+                  fontSize: "0.72rem",
+                  fontWeight: 700,
+                  color: "primary.main",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  mr: 0.5,
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: "50%",
+                    backgroundColor: "primary.main",
+                    animation: "pulse 1.5s infinite",
+                  }}
+                />
+                Thinking…
+              </Typography>
+            )}
+
+            <Tooltip title="Copy invite link">
+              <IconButton
+                size="small"
+                onClick={copyShareLink}
+                sx={{
+                  p: 0.5,
+                  color: "text.secondary",
+                  "&:hover": { color: "primary.main" },
+                }}
+              >
+                <Icon icon="mdi:content-copy" width={16} />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Flip board view">
+              <IconButton
+                size="small"
+                onClick={() => setBoardFlipped((v) => !v)}
+                sx={{
+                  p: 0.5,
+                  color: "text.secondary",
+                  "&:hover": { color: "primary.main" },
+                }}
+              >
+                <Icon icon="mdi:rotate-3d-variant" width={16} />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Match Chat">
+              <IconButton
+                size="small"
+                onClick={() =>
+                  router.push(`/chat?session=${sessionId}&role=${playerRole}`)
+                }
+                sx={{
+                  p: 0.5,
+                  color: "primary.main",
+                  "&:hover": { backgroundColor: "rgba(59,154,198,0.15)" },
+                }}
+              >
+                <Icon icon="streamline:chat-bubble-square-typing-solid" width={15} />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Box>
+
+        {/* ── Interactive Chessboard with Drag & Drop ── */}
+        <Box
+          sx={{
+            borderRadius: "8px",
+            boxShadow: dark
+              ? "0 4px 24px rgba(0,0,0,0.6)"
+              : "0 4px 20px rgba(0,0,0,0.14)",
             overflow: "hidden",
             width: boardSize,
             height: boardSize,
+            backgroundColor: dark ? "#1f2024" : "#e2e8f0",
+            flexShrink: 0,
           }}
         >
           <Chessboard
             id="MultiplayerBoard"
             position={chess.fen()}
             boardWidth={boardSize}
-            boardOrientation={playerRole === "black" ? "black" : "white"}
-            isDraggablePiece={() => false}
-            arePiecesDraggable={false}
+            boardOrientation={currentBoardOrientation}
+            arePiecesDraggable={isMyTurn && !isGameOver}
+            isDraggablePiece={({ piece }) =>
+              isMyTurn &&
+              !isGameOver &&
+              (playerRole === "white"
+                ? piece.startsWith("w")
+                : piece.startsWith("b"))
+            }
+            onPieceDrop={onPieceDrop}
+            onSquareClick={onSquareClick}
+            customSquareStyles={customSquareStyles}
             customPieces={customPieces}
-            animationDuration={200}
+            animationDuration={150}
             customBoardStyle={{
-              borderRadius: "5px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.5)",
+              borderRadius: "6px",
             }}
           />
         </Box>
 
-        {/* White player label */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 0.5 }}>
-          <Box
-            sx={{
-              width: 32,
-              height: 32,
-              borderRadius: "50%",
-              backgroundColor: "#f5f5f5",
-              border: "2px solid #aaa",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: 700,
-              fontSize: "0.8rem",
-              color: "#111",
-            }}
-          >
-            W
-          </Box>
-          <Typography
-            component="div"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              fontWeight: 600,
-              color: "#e8eaed",
-            }}
-          >
-            {session.whiteName}
-            {playerRole === "white" && (
-              <Chip
-                label="You"
-                size="small"
-                sx={{ ml: 1, fontSize: "0.7rem", height: 18 }}
-                color="primary"
-              />
-            )}
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* ── Right Panel — Move Log + CLI ── */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: { xs: "auto", md: boardSize + 80 },
-          maxHeight: { xs: "auto", md: boardSize + 80 },
-          width: { xs: "100%", md: 310 },
-          maxWidth: { xs: "100%", md: 310 },
-          border: "2px solid",
-          borderColor: "primary.main",
-          borderRadius: 2,
-          boxShadow: "0 2px 10px rgba(0,0,0,0.5)",
-          backgroundColor: "secondary.main",
-          overflow: "hidden",
-        }}
-      >
-        {/* Header */}
+        {/* ── Bottom Player Bar ── */}
         <Box
           sx={{
+            width: "100%",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            px: 2,
-            py: 1,
-            backgroundColor: "#cdd6e0",
-            flexShrink: 0,
+            px: { xs: 0.5, sm: 1 },
+            py: 0.5,
+            mt: 0.5,
+            borderRadius: "6px",
+            backgroundColor: isBottomPlayerTurn
+              ? dark ? "rgba(59,154,198,0.12)" : "rgba(59,154,198,0.08)"
+              : "transparent",
+            transition: "all 0.2s ease",
           }}
         >
-          <Box>
-            <Typography
-              sx={{
-                fontWeight: 700,
-                fontSize: "0.95rem",
-                color: "#1a1d21",
-              }}
-            >
-              Move Log:
-            </Typography>
-            <Typography sx={{ fontSize: "0.7rem", color: "#4a5568" }}>
-              Session: <code style={{ fontSize: "0.7rem" }}>{sessionId}</code>
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            {/* Turn indicator */}
-            <Chip
-              label={
-                isGameOver
-                  ? "Game Over"
-                  : isMyTurn
-                  ? "Your turn"
-                  : `Waiting for ${opponentName}…`
-              }
-              size="small"
-              sx={{
-                fontSize: "0.7rem",
-                backgroundColor: isGameOver
-                  ? "#555"
-                  : isMyTurn
-                  ? "rgba(59,154,198,0.2)"
-                  : "rgba(255,255,255,0.07)",
-                color: isGameOver
-                  ? "#aaa"
-                  : isMyTurn
-                  ? "primary.main"
-                  : "#7a8592",
-                border: isMyTurn && !isGameOver ? "1px solid" : "none",
-                borderColor: "primary.main",
-              }}
-            />
-            <Tooltip title="Match Chat">
-              <IconButton
-                size="small"
-                onClick={() =>
-                  router.push(
-                    `/chat?session=${sessionId}&role=${playerRole}`
-                  )
-                }
-                sx={{ color: "#1a1d21" }}
-              >
-                <Icon
-                  icon="streamline:chat-bubble-square-typing-solid"
-                  height={16}
-                />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        </Box>
-
-        {/* Move history */}
-        <Box
-          ref={logContainerRef}
-          sx={{
-            flex: 1,
-            overflowY: "auto",
-            px: 2.5,
-            py: 2,
-            maxHeight: { xs: "260px", lg: "unset" },
-            fontFamily:
-              "'Fira Code', 'JetBrains Mono', 'Consolas', monospace",
-            "&::-webkit-scrollbar": { width: "5px" },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "rgba(255,255,255,0.12)",
-              borderRadius: "3px",
-            },
-          }}
-        >
-          {moveLog.length === 0 ? (
-            <Typography
-              sx={{
-                fontFamily: "inherit",
-                color: "text.disabled",
-                fontSize: "0.82rem",
-                fontStyle: "italic",
-              }}
-            >
-              No moves yet. {isMyTurn ? "You go first!" : `Waiting for ${opponentName}…`}
-            </Typography>
-          ) : (
-            moveLog.map((entry, i) => (
-              <Typography
-                key={i}
-                sx={{
-                  fontFamily: "inherit",
-                  fontSize: "0.9rem",
-                  lineHeight: 2,
-                  color: "text.primary",
-                }}
-              >
-                <Box
-                  component="span"
-                  sx={{
-                    color:
-                      entry.player === "white"
-                        ? "primary.main"
-                        : "text.secondary",
-                    fontWeight: 700,
-                  }}
-                >
-                  {entry.name}
-                </Box>
-                {" >> "}
-                {entry.san}
-              </Typography>
-            ))
-          )}
-
-          {isGameOver && (
-            <>
-              <Divider sx={{ my: 1.5, borderColor: "rgba(255,255,255,0.08)" }} />
-              <Typography
-                sx={{
-                  fontFamily: "inherit",
-                  color: "primary.main",
-                  fontSize: "0.85rem",
-                  fontWeight: 700,
-                  textAlign: "center",
-                }}
-              >
-                🏁{" "}
-                {chess.isCheckmate()
-                  ? `Checkmate! ${session.turn === "white" ? session.blackName : session.whiteName} wins.`
-                  : chess.isDraw()
-                  ? "It's a draw!"
-                  : "Game over."}
-              </Typography>
-            </>
-          )}
-        </Box>
-
-        {/* CLI input */}
-        <Box
-          sx={{
-            px: 2,
-            pt: 1.5,
-            pb: 2,
-            borderTop: "1px solid rgba(255,255,255,0.07)",
-            flexShrink: 0,
-          }}
-        >
-          {/* Connection status */}
-          {fetchError && (
-            <Typography
-              sx={{ fontSize: "0.72rem", color: "salmon", mb: 0.75 }}
-            >
-              ⚠ {fetchError}
-            </Typography>
-          )}
-
-          {submitError && (
-            <Typography
-              sx={{ fontSize: "0.72rem", color: "salmon", mb: 0.75 }}
-            >
-              ✗ {submitError}
-            </Typography>
-          )}
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              border: "1.5px solid",
-              borderColor:
-                isGameOver || !isMyTurn
-                  ? "rgba(255,255,255,0.1)"
-                  : "primary.main",
-              borderRadius: "6px",
-              px: 1.5,
-              py: 0.9,
-              backgroundColor: "rgba(0,0,0,0.2)",
-              transition: "box-shadow 0.2s",
-              "&:focus-within": {
-                boxShadow:
-                  isMyTurn && !isGameOver
-                    ? "0 0 0 3px rgba(59,154,198,0.3)"
-                    : "none",
-              },
-              fontFamily:
-                "'Fira Code', 'JetBrains Mono', 'Consolas', monospace",
-              opacity: isGameOver || !isMyTurn ? 0.5 : 1,
-            }}
-          >
-            <Typography
-              component="span"
-              sx={{
-                fontFamily: "inherit",
-                fontSize: "0.875rem",
-                color: "primary.main",
-                fontWeight: 700,
-                whiteSpace: "nowrap",
-                userSelect: "none",
-                mr: 0.5,
-              }}
-            >
-              {turnPrefix}
-            </Typography>
-
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 0 }}>
             <Box
-              component="input"
-              ref={inputRef}
-              value={inputValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setInputValue(e.target.value)
-              }
-              onKeyDown={handleKeyDown}
-              placeholder={
-                isGameOver
-                  ? "Game over"
-                  : isMyTurn
-                  ? "e2e4"
-                  : "Waiting…"
-              }
-              disabled={!isMyTurn || isGameOver || submitting}
-              autoFocus={isMyTurn}
-              spellCheck={false}
-              autoComplete="off"
               sx={{
-                flex: 1,
-                background: "transparent",
-                border: "none",
-                outline: "none",
-                color: "text.primary",
-                fontFamily: "inherit",
-                fontSize: "0.875rem",
-                caretColor: "primary.main",
-                "&::placeholder": { color: "text.disabled" },
-                "&:disabled": { cursor: "not-allowed" },
+                width: 26,
+                height: 26,
+                borderRadius: "50%",
+                backgroundColor: bottomPlayerRole === "black" ? "#1e2022" : "#f1f3f5",
+                border: `2px solid ${bottomPlayerRole === "black" ? "#4a4d52" : "#cbd5e1"}`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 800,
+                fontSize: "0.72rem",
+                color: bottomPlayerRole === "black" ? "#f8fafc" : "#111827",
+                flexShrink: 0,
               }}
-            />
+            >
+              {bottomPlayerRole === "black" ? "B" : "W"}
+            </Box>
 
-            {submitting && (
-              <CircularProgress size={14} sx={{ ml: 1, color: "primary.main" }} />
-            )}
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: { xs: "0.85rem", sm: "0.92rem" },
+                color: "text.primary",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                display: "flex",
+                alignItems: "center",
+                gap: 0.75,
+              }}
+            >
+              {bottomPlayerName}
+              {bottomPlayerRole === playerRole && (
+                <Chip
+                  label="You"
+                  size="small"
+                  color="primary"
+                  sx={{ height: 18, fontSize: "0.68rem", fontWeight: 700 }}
+                />
+              )}
+            </Typography>
+          </Box>
+
+          {/* Bottom Player Turn Badge & Clock */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, flexShrink: 0 }}>
+            {/* Bottom Player Clock Badge */}
+            <Box
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 0.5,
+                px: 1,
+                py: 0.25,
+                borderRadius: "6px",
+                fontFamily: "'Fira Code', 'JetBrains Mono', 'Consolas', monospace",
+                fontWeight: 700,
+                fontSize: { xs: "0.82rem", sm: "0.88rem" },
+                letterSpacing: "0.5px",
+                backgroundColor: isBottomPlayerTurn
+                  ? bottomPlayerTimeMs < 30000
+                    ? "rgba(239, 68, 68, 0.2)"
+                    : dark
+                    ? "rgba(59, 154, 198, 0.2)"
+                    : "rgba(59, 154, 198, 0.12)"
+                  : dark
+                  ? "rgba(255, 255, 255, 0.06)"
+                  : "rgba(0, 0, 0, 0.05)",
+                color:
+                  bottomPlayerTimeMs < 30000 && isBottomPlayerTurn
+                    ? "#ef4444"
+                    : isBottomPlayerTurn
+                    ? "primary.main"
+                    : "text.secondary",
+                border: "1px solid",
+                borderColor: isBottomPlayerTurn
+                  ? bottomPlayerTimeMs < 30000
+                    ? "rgba(239, 68, 68, 0.5)"
+                    : "primary.main"
+                  : "transparent",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <Icon icon="mdi:clock-outline" width={14} />
+              {formatClock(bottomPlayerTimeMs)}
+            </Box>
+
+            {isBottomPlayerTurn && !isGameOver ? (
+              <Chip
+                label={bottomPlayerRole === playerRole ? "Your turn" : "Thinking…"}
+                size="small"
+                color={bottomPlayerRole === playerRole ? "primary" : "default"}
+                sx={{
+                  fontWeight: 700,
+                  fontSize: "0.72rem",
+                  height: 22,
+                }}
+              />
+            ) : isGameOver ? (
+              <Chip
+                label="Game Over"
+                size="small"
+                sx={{
+                  fontWeight: 700,
+                  fontSize: "0.72rem",
+                  height: 22,
+                }}
+              />
+            ) : null}
           </Box>
         </Box>
       </Box>
-    </Grid>
+
+      {/* ── Game Over Dialog / Modal ── */}
+      <Dialog
+        open={isGameOver && !gameOverDismissed}
+        onClose={() => setGameOverDismissed(true)}
+        PaperProps={{
+          sx: {
+            borderRadius: "12px",
+            p: 1.5,
+            minWidth: 300,
+            textAlign: "center",
+            backgroundColor: dark ? "#19191c" : "#ffffff",
+          },
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: 800, fontSize: "1.25rem", pb: 1 }}>
+          🏁 Game Over
+        </DialogTitle>
+        <DialogContent>
+          <Typography sx={{ fontSize: "1rem", color: "text.primary", mb: 1 }}>
+            {chess.isCheckmate()
+              ? `Checkmate! ${
+                  session.turn === "white" ? session.blackName : session.whiteName
+                } wins!`
+              : session.flagged
+              ? `⏰ Time Out! ${
+                  session.turn === "white" ? session.blackName : session.whiteName
+                } wins on time!`
+              : chess.isDraw()
+              ? "The game ended in a draw!"
+              : "The game has concluded."}
+          </Typography>
+          <Typography sx={{ fontSize: "0.82rem", color: "text.secondary" }}>
+            Total moves played: {session.moves.length}
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center", gap: 1 }}>
+          <Button
+            variant="outlined"
+            onClick={() => setGameOverDismissed(true)}
+            sx={{ textTransform: "none", fontWeight: 600 }}
+          >
+            Review Board
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => router.push("/play")}
+            sx={{ textTransform: "none", fontWeight: 700 }}
+          >
+            Play New Match
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ── Copy link snackbar ── */}
+      <Snackbar
+        open={copiedLink}
+        autoHideDuration={2000}
+        onClose={() => setCopiedLink(false)}
+        message="Match invite link copied to clipboard! 📋"
+      />
+    </Box>
   );
 }

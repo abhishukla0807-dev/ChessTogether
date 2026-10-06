@@ -5,6 +5,9 @@
   "license": "GPL-3.0-only",
   "scripts": {
     "dev": "cross-env NEXT_DISABLE_TURBOPACK=1 next dev",
+    "backend:dev": "powershell -File ../run-backend.ps1",
+    "backend:build": "cross-env JAVA_HOME=../tools/jdk-25 mvn -f backend/pom.xml package",
+    "backend:test": "cross-env JAVA_HOME=../tools/jdk-25 mvn -f backend/pom.xml test",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --ext .ts,.tsx src/ && tsc --noEmit",
@@ -22,6 +25,7 @@
     "@tanstack/react-query": "^5.75.5",
     "chess.js": "^1.2.0",
     "firebase": "^11.1.0",
+    "gray-matter": "^4.0.3",
     "idb": "^8.0.1",
     "jotai": "^2.11.0",
     "next": "16.2.3",

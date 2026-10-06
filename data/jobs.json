@@ -1,0 +1,650 @@
+[
+  {
+    "id": 1,
+    "title": "Backend Developer Intern",
+    "company": "Razorpay",
+    "field": "Backend Development",
+    "jobType": "Internship",
+    "experience": "Fresher",
+    "location": "Noida, India",
+    "salary": "₹4 LPA - ₹7 LPA",
+    "workMode": "Hybrid",
+    "skills": ["Java", "Spring Boot", "SQL", "Redis"],
+    "applicationUrl": "https://razorpay.com/careers",
+    "description": "Join Razorpay's Core Banking Infrastructure team as a Backend Developer Intern. You will design, build, and optimize high-throughput distributed microservices handling millions of financial transactions daily across Indian banks and UPI rails.",
+    "responsibilities": [
+      "Develop and maintain secure, reliable RESTful APIs using Java and Spring Boot.",
+      "Collaborate with senior engineers on database optimization and query caching strategies.",
+      "Write unit and integration tests using JUnit and Mockito to maintain high test coverage.",
+      "Participate in daily engineering standups, architectural design reviews, and blameless post-mortems."
+    ],
+    "requirements": [
+      "B.Tech / B.E. / MCA in Computer Science, IT, or related technical disciplines.",
+      "Strong foundational knowledge of Data Structures, Algorithms, and Object-Oriented Design.",
+      "Hands-on experience with Java, Spring framework, and Relational Databases (MySQL/PostgreSQL).",
+      "Familiarity with Git, Docker, and REST API conventions."
+    ],
+    "postedDate": "2 days ago"
+  },
+  {
+    "id": 2,
+    "title": "Junior Frontend Engineer",
+    "company": "Swiggy",
+    "field": "Frontend Development",
+    "jobType": "Full-time",
+    "experience": "Fresher",
+    "location": "Bengaluru, India",
+    "salary": "₹8 LPA - ₹12 LPA",
+    "workMode": "Hybrid",
+    "skills": ["React", "TypeScript", "Next.js", "Tailwind CSS"],
+    "applicationUrl": "https://careers.swiggy.com",
+    "description": "Swiggy is seeking a passionate Junior Frontend Engineer to build snappy, high-performance customer checkout and live tracking experiences for millions of daily active users across India.",
+    "responsibilities": [
+      "Implement pixel-perfect, accessible user interfaces in React and Next.js.",
+      "Optimize web application bundle sizes and Web Vitals for low-bandwidth mobile devices.",
+      "Integrate RESTful and WebSocket endpoints for real-time order status updates.",
+      "Collaborate with UI/UX designers and product managers to iterate rapidly on feature prototypes."
+    ],
+    "requirements": [
+      "Solid proficiency in modern JavaScript (ES6+), TypeScript, HTML5, and CSS3.",
+      "Demonstrated portfolio or personal projects built with React or Next.js.",
+      "Understanding of state management patterns, client-side caching, and responsive web design.",
+      "Eagerness to learn in a fast-paced, high-scale hyper-growth consumer environment."
+    ],
+    "postedDate": "Just now"
+  },
+  {
+    "id": 3,
+    "title": "Full Stack Engineer",
+    "company": "Zerodha",
+    "field": "Full Stack Development",
+    "jobType": "Full-time",
+    "experience": "1-3 years",
+    "location": "Bengaluru, India",
+    "salary": "₹15 LPA - ₹24 LPA",
+    "workMode": "Remote",
+    "skills": ["Go", "React", "PostgreSQL", "Kafka"],
+    "applicationUrl": "https://zerodha.com/careers",
+    "description": "Zerodha is looking for a thoughtful Full Stack Engineer to contribute to Kite and Coin platforms. We value simple, maintainable software and self-directed problem solving over buzzwords and bureaucracy.",
+    "responsibilities": [
+      "Architect and ship clean, reliable web apps and background transaction workers.",
+      "Maintain low-latency WebSocket data streaming for real-time market ticks.",
+      "Profile database queries and enforce strict zero-data-loss accounting invariants.",
+      "Contribute to internal developer tooling and open source packages."
+    ],
+    "requirements": [
+      "1 to 3 years of hands-on software development experience.",
+      "Strong command of Go (Golang) or Python on the backend, alongside TypeScript/React on frontend.",
+      "Deep appreciation for database normalization, transaction isolation, and network sockets.",
+      "Excellent asynchronous written communication skills in a remote-first culture."
+    ],
+    "postedDate": "1 day ago"
+  },
+  {
+    "id": 4,
+    "title": "Data Scientist - Personalization",
+    "company": "Flipkart",
+    "field": "Data Science",
+    "jobType": "Full-time",
+    "experience": "1-3 years",
+    "location": "Bengaluru, India",
+    "salary": "₹16 LPA - ₹26 LPA",
+    "workMode": "Hybrid",
+    "skills": ["Python", "Pandas", "SQL", "Scikit-Learn", "PySpark"],
+    "applicationUrl": "https://www.flipkartcareers.com",
+    "description": "At Flipkart, our Data Science team powers product recommendation, personalized search rankings, and supply chain forecasting. You will extract insights from petabytes of user interaction data.",
+    "responsibilities": [
+      "Build and evaluate statistical models for customer intent and churn prediction.",
+      "Design and monitor rigorous A/B experiments across millions of shopping sessions.",
+      "Collaborate with Big Data engineering to operationalize ETL pipelines in PySpark.",
+      "Synthesize complex quantitative findings into actionable insights for leadership."
+    ],
+    "requirements": [
+      "Degree in Statistics, Computer Science, Economics, Mathematics, or equivalent.",
+      "1-3 years of applied data science experience handling large scale datasets.",
+      "Advanced proficiency in SQL, Python data stack (NumPy, SciPy, Pandas), and hypothesis testing.",
+      "Experience with recommendation systems or collaborative filtering is a plus."
+    ],
+    "postedDate": "3 days ago"
+  },
+  {
+    "id": 5,
+    "title": "Machine Learning Engineer",
+    "company": "PhonePe",
+    "field": "Machine Learning",
+    "jobType": "Full-time",
+    "experience": "3-5 years",
+    "location": "Pune, India",
+    "salary": "₹22 LPA - ₹34 LPA",
+    "workMode": "Hybrid",
+    "skills": ["PyTorch", "TensorFlow", "MLOps", "Docker", "FastAPI"],
+    "applicationUrl": "https://www.phonepe.com/careers",
+    "description": "PhonePe is looking for an experienced Machine Learning Engineer to drive real-time fraud detection and risk assessment systems processing over 100 million UPI transactions daily.",
+    "responsibilities": [
+      "Deploy deep learning and gradient boosted decision tree models into sub-15ms production serving pipelines.",
+      "Build automated CI/CD for model training, validation, drift detection, and shadow deployments.",
+      "Work closely with risk and compliance teams to enforce algorithmic fairness and interpretability.",
+      "Benchmark model inferencing latency using ONNX Runtime and TensorRT."
+    ],
+    "requirements": [
+      "3+ years of experience training and shipping production ML models.",
+      "Expertise in PyTorch or TensorFlow and ML serving frameworks (Triton, TorchServe, FastAPI).",
+      "Familiarity with feature stores (Feast) and pipeline orchestrators (Kubeflow / Airflow).",
+      "Solid understanding of distributed systems and message brokers (Kafka)."
+    ],
+    "postedDate": "4 days ago"
+  },
+  {
+    "id": 6,
+    "title": "Generative AI Research Intern",
+    "company": "Krutrim AI",
+    "field": "Artificial Intelligence",
+    "jobType": "Internship",
+    "experience": "Fresher",
+    "location": "Bengaluru, India",
+    "salary": "₹40,000 - ₹60,000 / month",
+    "workMode": "On-site",
+    "skills": ["Python", "Hugging Face", "LLMs", "PyTorch", "LangChain"],
+    "applicationUrl": "https://krutrim.com/careers",
+    "description": "Krutrim AI is pioneering foundational Indic LLMs. Join our research team to experiment with fine-tuning, multilingual instruction datasets, and Retrieval-Augmented Generation (RAG).",
+    "responsibilities": [
+      "Curate, clean, and evaluate multi-lingual Indic training corpora across 22 scheduled languages.",
+      "Implement parameter-efficient fine-tuning (LoRA, QLoRA) on modern open-source LLM weights.",
+      "Benchmark model outputs on perplexity, reasoning benchmarks, and safety evaluations.",
+      "Author reproducible experiment notes and open-source demonstration apps."
+    ],
+    "requirements": [
+      "Currently pursuing or recent graduate in B.Tech/M.Tech/MS in Computer Science or AI.",
+      "Familiarity with Transformer architectures, attention mechanisms, and Hugging Face Transformers.",
+      "Proficient Python programmer with comfort using Linux GPU clusters.",
+      "Strong desire to contribute to sovereign Indian generative intelligence."
+    ],
+    "postedDate": "1 day ago"
+  },
+  {
+    "id": 7,
+    "title": "DevOps & Cloud Engineer",
+    "company": "Postman",
+    "field": "Cloud & DevOps",
+    "jobType": "Full-time",
+    "experience": "1-3 years",
+    "location": "Hyderabad, India",
+    "salary": "₹14 LPA - ₹22 LPA",
+    "workMode": "Remote",
+    "skills": ["AWS", "Kubernetes", "Terraform", "GitHub Actions", "Prometheus"],
+    "applicationUrl": "https://www.postman.com/company/careers",
+    "description": "Postman's platform engineering team is hiring a Cloud & DevOps Engineer to scale infrastructure supporting 30+ million developers worldwide.",
+    "responsibilities": [
+      "Manage infrastructure as code (IaC) across multiple AWS regions using Terraform and Terragrunt.",
+      "Administer multi-tenant production Kubernetes (EKS) clusters with automated node scaling.",
+      "Build zero-downtime canary deployment pipelines using GitHub Actions and ArgoCD.",
+      "Implement end-to-end observability, alerting rules, and incident runbooks in Grafana and Datadog."
+    ],
+    "requirements": [
+      "1-3 years administering cloud infrastructure on AWS or GCP.",
+      "Proficiency with containerization (Docker) and Kubernetes orchestration.",
+      "Experience with declarative Infrastructure as Code using Terraform.",
+      "Good scripting skills in Bash, Python, or Go."
+    ],
+    "postedDate": "3 days ago"
+  },
+  {
+    "id": 8,
+    "title": "Cybersecurity Analyst",
+    "company": "CRED",
+    "field": "Cybersecurity",
+    "jobType": "Full-time",
+    "experience": "1-3 years",
+    "location": "Bengaluru, India",
+    "salary": "₹13 LPA - ₹20 LPA",
+    "workMode": "Hybrid",
+    "skills": ["SIEM", "Penetration Testing", "VAPT", "Network Security", "OWASP"],
+    "applicationUrl": "https://careers.cred.club",
+    "description": "Protect the financial assets and privacy of CRED members. As a Cybersecurity Analyst, you will conduct vulnerability assessments, penetration tests, and threat intelligence operations.",
+    "responsibilities": [
+      "Perform periodic Vulnerability Assessment & Penetration Testing (VAPT) on web and mobile apps.",
+      "Analyze security telemetry in Splunk/Elasticsearch to investigate anomalous authentication patterns.",
+      "Audit cloud IAM policies and enforce least-privilege security controls across microservices.",
+      "Conduct simulated social engineering and phishing drills to bolster organizational defense."
+    ],
+    "requirements": [
+      "Bachelor's degree in Information Security, Computer Science, or equivalent field experience.",
+      "Certifications such as CEH, OSCP, CompTIA Security+, or AWS Security Specialty preferred.",
+      "Sound understanding of the OWASP Top 10, TCP/IP networking, and TLS protocols.",
+      "Familiarity with threat hunting methodologies and incident response lifecycles."
+    ],
+    "postedDate": "5 days ago"
+  },
+  {
+    "id": 9,
+    "title": "UI/UX Product Designer",
+    "company": "Urban Company",
+    "field": "UI/UX Design",
+    "jobType": "Full-time",
+    "experience": "1-3 years",
+    "location": "Gurugram, India",
+    "salary": "₹11 LPA - ₹18 LPA",
+    "workMode": "Hybrid",
+    "skills": ["Figma", "Design Systems", "Prototyping", "User Research", "Wireframing"],
+    "applicationUrl": "https://www.urbancompany.com/careers",
+    "description": "Urban Company is looking for an empathetic UI/UX Designer to craft seamless service booking and partner experiences for gig professionals across 50+ Indian cities.",
+    "responsibilities": [
+      "Translate complex multi-step service workflows into intuitive wireframes and interactive prototypes.",
+      "Conduct in-person usability tests with service partners and end consumers to uncover friction.",
+      "Maintain and evolve Urban Company's unified mobile design token library in Figma.",
+      "Partner with engineering teams to ensure high fidelity execution across iOS and Android."
+    ],
+    "requirements": [
+      "Strong portfolio showcasing product design process, user research, and shipped interfaces.",
+      "Mastery of Figma, component auto-layout, interactive variants, and modern prototyping.",
+      "Deep sensitivity to vernacular Indian user interfaces and accessibility standards.",
+      "Strong cross-functional collaboration and design presentation skills."
+    ],
+    "postedDate": "2 days ago"
+  },
+  {
+    "id": 10,
+    "title": "Associate Product Manager",
+    "company": "Groww",
+    "field": "Product Management",
+    "jobType": "Full-time",
+    "experience": "Fresher",
+    "location": "Bengaluru, India",
+    "salary": "₹12 LPA - ₹18 LPA",
+    "workMode": "Hybrid",
+    "skills": ["Product Strategy", "Data Analytics", "SQL", "Wireframing", "A/B Testing"],
+    "applicationUrl": "https://groww.in/careers",
+    "description": "Groww is democratizing investing in India. As an Associate Product Manager, you will own the end-to-end product lifecycle for new consumer investment products and onboarding funnels.",
+    "responsibilities": [
+      "Define detailed Product Requirement Documents (PRDs) with clear user stories and success metrics.",
+      "Analyze funnel drop-offs and feature engagement using Mixpanel, Amplitude, and SQL queries.",
+      "Work side-by-side with designers, backend developers, and legal teams to ship compliance-ready features.",
+      "Synthesize feedback from customer support transcripts to prioritize product backlog tickets."
+    ],
+    "requirements": [
+      "B.Tech / MBA from a premier institute or equivalent demonstrable product building experience.",
+      "Exceptional first-principles thinking, quantitative analytical rigor, and curiosity.",
+      "Ability to write SQL queries to pull data independently without relying on analysts.",
+      "High empathy for first-time retail investors across Tier 2 and Tier 3 Indian towns."
+    ],
+    "postedDate": "1 day ago"
+  },
+  {
+    "id": 11,
+    "title": "Junior Software Engineer",
+    "company": "Zoho Corporation",
+    "field": "Software Development",
+    "jobType": "Full-time",
+    "experience": "Fresher",
+    "location": "Chennai, India",
+    "salary": "₹6 LPA - ₹10 LPA",
+    "workMode": "On-site",
+    "skills": ["Java", "C++", "Data Structures", "Algorithms", "Object-Oriented Design"],
+    "applicationUrl": "https://www.zoho.com/careers",
+    "description": "Zoho creates enterprise software trusted by over 100 million users worldwide. We hire engineers who love core computer science, memory management, and writing proprietary frameworks from scratch.",
+    "responsibilities": [
+      "Develop scalable enterprise modules for Zoho One suite in Java and C++.",
+      "Optimize memory consumption and garbage collection behavior under high concurrency.",
+      "Design relational schemas and write efficient transaction procedures.",
+      "Debug and resolve tricky race conditions and boundary condition issues."
+    ],
+    "requirements": [
+      "Deep understanding of core Computer Science fundamentals (Operating Systems, DBMS, Networks).",
+      "Strong problem solving ability demonstrated in Java, C++, or C.",
+      "Passion for building long-term software products without external venture pressure.",
+      "Self-driven attitude and readiness to work on-site at Zoho's Chennai campus."
+    ],
+    "postedDate": "Just now"
+  },
+  {
+    "id": 12,
+    "title": "Technical Content & Developer Advocate",
+    "company": "Hasura",
+    "field": "Other Fields",
+    "jobType": "Part-time",
+    "experience": "1-3 years",
+    "location": "Remote",
+    "salary": "₹5 LPA - ₹8 LPA",
+    "workMode": "Remote",
+    "skills": ["GraphQL", "PostgreSQL", "Technical Writing", "React", "Developer Relations"],
+    "applicationUrl": "https://hasura.io/careers",
+    "description": "Hasura makes data access blazingly fast. We are looking for a part-time Technical Writer & Developer Advocate to create tutorials, sample repositories, and architectural guides for the Indian developer community.",
+    "responsibilities": [
+      "Author in-depth technical blogs and guides on GraphQL, PostgreSQL caching, and instant APIs.",
+      "Build sample full-stack starter templates in Next.js, React, and Node.js demonstrating Hasura.",
+      "Engage with developers on Discord, GitHub Discussions, and community meetups.",
+      "Gather developer feedback on SDK ergonomics and relay actionable findings to product teams."
+    ],
+    "requirements": [
+      "Previous experience writing technical documentation, tutorials, or developer-focused articles.",
+      "Comfortable with GraphQL, SQL databases, and modern JavaScript web frameworks.",
+      "Clear, engaging English writing style capable of breaking down complex engineering concepts.",
+      "Flexible 20 hours per week commitment with remote availability."
+    ],
+    "postedDate": "6 days ago"
+  },
+  {
+    "id": 13,
+    "title": "Frontend Engineering Intern",
+    "company": "CRED",
+    "field": "Frontend Development",
+    "jobType": "Internship",
+    "experience": "Fresher",
+    "location": "Bengaluru, India",
+    "salary": "₹30,000 - ₹45,000 / month",
+    "workMode": "Hybrid",
+    "skills": ["React", "CSS3", "JavaScript", "Figma", "Animations"],
+    "applicationUrl": "https://careers.cred.club",
+    "description": "Work with CRED's design-obsessed frontend crew. Help us build buttery-smooth 60fps animations, neo-brutalist layouts, and hyper-responsive web experiences for luxury commerce and payments.",
+    "responsibilities": [
+      "Build reusable component primitives that adhere to CRED's design system guidelines.",
+      "Implement gesture handling and micro-animations using Framer Motion and modern CSS.",
+      "Ensure fast load times and clean responsiveness across mobile and desktop viewports.",
+      "Participate in design critiques and code reviews with staff engineers."
+    ],
+    "requirements": [
+      "Final year engineering student or recent graduate passionate about frontend craftsmanship.",
+      "Good working knowledge of React, JavaScript (ES6+), and CSS transitions.",
+      "Keen eye for typography, spatial harmony, and motion aesthetics.",
+      "Bonus: Familiarity with Canvas API, WebGL, or SVG animations."
+    ],
+    "postedDate": "1 day ago"
+  },
+  {
+    "id": 14,
+    "title": "Cloud Infrastructure Intern",
+    "company": "Jio Platforms",
+    "field": "Cloud & DevOps",
+    "jobType": "Internship",
+    "experience": "Fresher",
+    "location": "Mumbai, India",
+    "salary": "₹25,000 - ₹35,000 / month",
+    "workMode": "On-site",
+    "skills": ["Linux", "Docker", "Shell Scripting", "Networking", "Kubernetes"],
+    "applicationUrl": "https://careers.jio.com",
+    "description": "Jio Platforms powers telecommunications and cloud services for over 450 million subscribers. Join the cloud infrastructure team to learn edge computing, hyper-scale datacenter automation, and 5G orchestration.",
+    "responsibilities": [
+      "Assist in configuring and monitoring bare-metal Linux servers and virtual clusters.",
+      "Write automated bash and python scripts for periodic health checks and log archiving.",
+      "Assist with containerizing internal enterprise services using Docker.",
+      "Document standard operating procedures for datacenter patch deployments."
+    ],
+    "requirements": [
+      "B.E. / B.Tech in Electronics, Telecommunications, or Computer Science.",
+      "Solid understanding of Linux operating system concepts and command line utilities.",
+      "Basic understanding of IP routing, DNS, subnetting, and TCP/UDP communication.",
+      "Curiosity about massive-scale telecom and cloud infrastructure."
+    ],
+    "postedDate": "4 days ago"
+  },
+  {
+    "id": 15,
+    "title": "Backend Software Engineer",
+    "company": "slice",
+    "field": "Backend Development",
+    "jobType": "Full-time",
+    "experience": "1-3 years",
+    "location": "Bengaluru, India",
+    "salary": "₹14 LPA - ₹22 LPA",
+    "workMode": "Hybrid",
+    "skills": ["Java", "Spring Boot", "PostgreSQL", "Kafka", "Microservices"],
+    "applicationUrl": "https://sliceit.com/careers",
+    "description": "slice is reimagining consumer financial services in India. We are hiring Backend Engineers to develop resilient microservices for our fast-growing payments and UPI banking ecosystem.",
+    "responsibilities": [
+      "Design clean domain models and scalable event-driven services using Spring Boot and Kafka.",
+      "Ensure compliance with RBI financial data security guidelines and PCI-DSS standards.",
+      "Refactor monolithic bottlenecks into distributed event-driven architectures.",
+      "Conduct load testing and performance profiling to handle peak festive transaction surges."
+    ],
+    "requirements": [
+      "1 to 3 years of software engineering experience in Java or Kotlin.",
+      "Experience working with relational databases and message brokers.",
+      "Solid grasp of concurrent programming and RESTful API design.",
+      "Degree in Computer Science or equivalent practical experience."
+    ],
+    "postedDate": "3 days ago"
+  },
+  {
+    "id": 16,
+    "title": "Part-time AI Model Evaluator",
+    "company": "Turing",
+    "field": "Artificial Intelligence",
+    "jobType": "Part-time",
+    "experience": "Fresher",
+    "location": "Remote",
+    "salary": "₹4 LPA - ₹6 LPA",
+    "workMode": "Remote",
+    "skills": ["Python", "Prompt Engineering", "Code Review", "LLM Evaluation", "Debugging"],
+    "applicationUrl": "https://turing.com/careers",
+    "description": "Turing is hiring part-time AI Evaluators to benchmark, test, and improve large language models. You will review model-generated code, write complex test cases, and rank model outputs for accuracy.",
+    "responsibilities": [
+      "Evaluate code generated by state-of-the-art LLMs in Python, Java, and TypeScript.",
+      "Write edge-case tests and identify algorithmic hallucinations or security vulnerabilities.",
+      "Provide detailed qualitative reasoning for model ranking decisions.",
+      "Work 15-20 hours weekly on a self-scheduled flexible schedule."
+    ],
+    "requirements": [
+      "Proficient coding skills in at least one modern language (Python, JavaScript, or Java).",
+      "Strong attention to detail and ability to spot subtle logical bugs in code.",
+      "Familiarity with prompting techniques and generative AI tools.",
+      "Reliable high-speed internet connection and personal computer."
+    ],
+    "postedDate": "2 days ago"
+  },
+  {
+    "id": 17,
+    "title": "Cybersecurity Operations Engineer",
+    "company": "Wipro",
+    "field": "Cybersecurity",
+    "jobType": "Full-time",
+    "experience": "0-1 years",
+    "location": "Hyderabad, India",
+    "salary": "₹5 LPA - ₹8 LPA",
+    "workMode": "On-site",
+    "skills": ["SOC", "Wireshark", "Firewalls", "Incident Handling", "Linux"],
+    "applicationUrl": "https://careers.wipro.com",
+    "description": "Join Wipro's Global Security Operations Center (SOC) monitoring and protecting enterprise clients across banking, healthcare, and retail sectors against modern cyber threats.",
+    "responsibilities": [
+      "Monitor real-time SIEM alerts and categorize security incidents according to severity.",
+      "Perform initial triage of malware alerts, unauthorized login attempts, and DDoS spikes.",
+      "Coordinate with incident response teams and draft incident executive summaries.",
+      "Execute scheduled security patch audits on enterprise perimeter firewalls."
+    ],
+    "requirements": [
+      "B.Tech / MCA in Computer Science or IT with coursework in Network Security.",
+      "Understanding of packet analysis with Wireshark and firewall rule configurations.",
+      "Willingness to work in rotational 24/7 SOC shifts.",
+      "Strong verbal and written communication skills."
+    ],
+    "postedDate": "5 days ago"
+  },
+  {
+    "id": 18,
+    "title": "Senior Full Stack Developer",
+    "company": "BrowserStack",
+    "field": "Full Stack Development",
+    "jobType": "Full-time",
+    "experience": "3-5 years",
+    "location": "Mumbai, India",
+    "salary": "₹28 LPA - ₹42 LPA",
+    "workMode": "Remote",
+    "skills": ["Node.js", "React", "Ruby", "Redis", "Distributed Systems"],
+    "applicationUrl": "https://www.browserstack.com/careers",
+    "description": "BrowserStack is the world's leading software testing platform. We test over 2 million tests daily. As a Senior Full Stack Developer, you will architect real-time browser streaming infrastructure and web apps.",
+    "responsibilities": [
+      "Architect and build high-throughput full stack applications using React, Node.js, and Redis.",
+      "Work on low-latency WebRTC and WebSocket pipelines streaming remote mobile screens to browsers.",
+      "Mentor junior and mid-level engineers through technical design documentation and code reviews.",
+      "Drive performance optimizations targeting 99.99% service availability."
+    ],
+    "requirements": [
+      "3-5 years of full stack software engineering experience at scale.",
+      "Deep understanding of browser internals, event loops, DOM performance, and WebSockets.",
+      "Solid experience with distributed caching, message queues, and relational databases.",
+      "Demonstrated history of delivering complex user-facing features independently."
+    ],
+    "postedDate": "3 days ago"
+  },
+  {
+    "id": 19,
+    "title": "Machine Learning Intern",
+    "company": "InMobi",
+    "field": "Machine Learning",
+    "jobType": "Internship",
+    "experience": "Fresher",
+    "location": "Bengaluru, India",
+    "salary": "₹35,000 - ₹50,000 / month",
+    "workMode": "Hybrid",
+    "skills": ["Python", "Scikit-Learn", "Deep Learning", "SQL", "Feature Engineering"],
+    "applicationUrl": "https://www.inmobi.com/company/careers",
+    "description": "InMobi operates one of the world's largest independent mobile advertising platforms. Interns work directly with senior ML scientists on click-through rate (CTR) prediction and bidding algorithms.",
+    "responsibilities": [
+      "Perform exploratory data analysis on billions of ad auction impression logs.",
+      "Feature engineering for real-time ranking models using Scikit-Learn and PyTorch.",
+      "Assist in setting up offline evaluation pipelines and validation metrics.",
+      "Present experimental results and trade-offs to senior data science leads."
+    ],
+    "requirements": [
+      "Currently enrolled in pre-final or final year B.Tech/M.Tech/MS program in CS/Data Science.",
+      "Strong foundation in linear algebra, multivariable calculus, and probability.",
+      "Hands-on Python programming skills with practical experience training baseline models.",
+      "Familiarity with SQL and distributed data stores is an advantage."
+    ],
+    "postedDate": "1 day ago"
+  },
+  {
+    "id": 20,
+    "title": "Software Engineer (Platforms)",
+    "company": "Juspay",
+    "field": "Software Development",
+    "jobType": "Full-time",
+    "experience": "1-3 years",
+    "location": "Bengaluru, India",
+    "salary": "₹18 LPA - ₹28 LPA",
+    "workMode": "On-site",
+    "skills": ["Haskell", "Rust", "Functional Programming", "Distributed Systems", "PostgreSQL"],
+    "applicationUrl": "https://juspay.in/careers",
+    "description": "Juspay processes billions of digital payments every month for giants like Amazon, Swiggy, and Flipkart. We are famous for using functional programming (Haskell and PureScript) to achieve extreme reliability.",
+    "responsibilities": [
+      "Write mathematically sound, type-safe backend systems in Haskell and Rust.",
+      "Maintain 99.999% uptime on high-throughput payment gateways and UPI transaction switches.",
+      "Collaborate with Indian banking partners to optimize network routing and fallback logic.",
+      "Contribute to open-source functional programming libraries and runtime tools."
+    ],
+    "requirements": [
+      "Strong grasp of functional programming concepts or deep enthusiasm to master them.",
+      "High algorithmic proficiency and solid grasp of operating systems and concurrency.",
+      "Comfort working in an intellectually rigorous, engineering-driven environment.",
+      "1 to 3 years of software engineering experience."
+    ],
+    "postedDate": "Just now"
+  },
+  {
+    "id": 21,
+    "title": "Lead Product Designer",
+    "company": "Zerodha",
+    "field": "UI/UX Design",
+    "jobType": "Full-time",
+    "experience": "5+ years",
+    "location": "Bengaluru, India",
+    "salary": "₹30 LPA - ₹48 LPA",
+    "workMode": "Remote",
+    "skills": ["Design Strategy", "Figma", "User Research", "Interaction Design", "Accessibility"],
+    "applicationUrl": "https://zerodha.com/careers",
+    "description": "Shape the future of financial software in India. Zerodha is looking for a Lead Product Designer to champion clarity, utility, and minimalism across Kite trading and Coin mutual fund platforms.",
+    "responsibilities": [
+      "Lead UX strategy across multiple complex financial applications used by 12+ million active traders.",
+      "Radically simplify trading charts, order pads, and portfolio analytics interfaces.",
+      "Conduct qualitative user interviews with seasoned traders and retail investors.",
+      "Mentor and guide the product design guild in typography, spacing, and accessibility."
+    ],
+    "requirements": [
+      "5+ years designing production consumer or fintech products with demonstrable market impact.",
+      "Exquisite design craft: portfolio displaying deep thought for edge cases, error states, and speed.",
+      "Strong understanding of web technologies (HTML/CSS) to collaborate frictionlessly with engineers.",
+      "Passion for minimalist, utility-driven software that respects the user's attention."
+    ],
+    "postedDate": "4 days ago"
+  },
+  {
+    "id": 22,
+    "title": "DevOps Architect",
+    "company": "Infosys",
+    "field": "Cloud & DevOps",
+    "jobType": "Full-time",
+    "experience": "5+ years",
+    "location": "Pune, India",
+    "salary": "₹24 LPA - ₹36 LPA",
+    "workMode": "Hybrid",
+    "skills": ["Azure", "Kubernetes", "Ansible", "Terraform", "CI/CD Architecture"],
+    "applicationUrl": "https://www.infosys.com/careers",
+    "description": "Infosys is seeking a seasoned DevOps Architect to design enterprise cloud adoption roadmaps, automated governance frameworks, and hybrid cloud infrastructure for Fortune 500 accounts.",
+    "responsibilities": [
+      "Architect resilient multi-region cloud landing zones on Microsoft Azure and AWS.",
+      "Establish enterprise DevSecOps pipelines with automated vulnerability and license scanning.",
+      "Define infrastructure cost optimization and cloud finops best practices.",
+      "Lead and mentor a distributed team of 15+ DevOps and cloud reliability engineers."
+    ],
+    "requirements": [
+      "5+ years in DevOps / Cloud engineering with at least 2 years in an architect or lead capacity.",
+      "Expert-level knowledge of Terraform, Kubernetes, Helm, and enterprise CI/CD systems.",
+      "Certified Azure Solutions Architect Expert or AWS Certified Solutions Architect Professional.",
+      "Outstanding communication and executive stakeholder presentation skills."
+    ],
+    "postedDate": "5 days ago"
+  },
+  {
+    "id": 23,
+    "title": "Junior Data Analyst",
+    "company": "Tata Consultancy Services (TCS)",
+    "field": "Data Science",
+    "jobType": "Full-time",
+    "experience": "Fresher",
+    "location": "Gurugram, India",
+    "salary": "₹4.5 LPA - ₹7 LPA",
+    "workMode": "On-site",
+    "skills": ["SQL", "Power BI", "Excel", "Python", "Data Visualization"],
+    "applicationUrl": "https://www.tcs.com/careers",
+    "description": "TCS is hiring a Junior Data Analyst to support global supply chain and banking analytics accounts. You will build dashboards, execute SQL extractions, and synthesize business performance trends.",
+    "responsibilities": [
+      "Write and optimize complex SQL queries across multi-terabyte data warehouses.",
+      "Design interactive executive dashboards and KPI scorecards in Power BI and Tableau.",
+      "Perform data validation and reconcile data quality discrepancies across legacy systems.",
+      "Automate repetitive weekly reporting workflows using Python scripts."
+    ],
+    "requirements": [
+      "Bachelor's degree in Computer Science, Statistics, Mathematics, or Engineering.",
+      "Strong proficiency in SQL (joins, window functions, CTEs) and advanced Microsoft Excel.",
+      "Familiarity with data visualization principles in Power BI or Tableau.",
+      "Strong analytical mindset and methodical approach to data verification."
+    ],
+    "postedDate": "Just now"
+  },
+  {
+    "id": 24,
+    "title": "Technical Community Specialist",
+    "company": "Newton School",
+    "field": "Other Fields",
+    "jobType": "Part-time",
+    "experience": "0-1 years",
+    "location": "Remote",
+    "salary": "₹3.5 LPA - ₹5 LPA",
+    "workMode": "Remote",
+    "skills": ["Community Management", "Coding Mentorship", "DSA", "Web Development", "Event Planning"],
+    "applicationUrl": "https://www.newtonschool.co/careers",
+    "description": "Newton School is democratizing software education across Tier 2 and Tier 3 engineering colleges in India. We are hiring a Part-time Community Specialist to facilitate hackathons and coding discussions.",
+    "responsibilities": [
+      "Coordinate weekly online coding contests and competitive programming workshops.",
+      "Answer technical questions from enrolled students on Discord and community forums.",
+      "Organize guest sessions featuring industry tech leaders from top Indian startups.",
+      "Monitor community health metrics and maintain a welcoming, productive learning culture."
+    ],
+    "requirements": [
+      "Passion for developer communities, coding education, and student mentorship.",
+      "Basic understanding of Data Structures, Algorithms, and Web Development.",
+      "Friendly, proactive, and empathetic communication skills.",
+      "Ability to commit 15-20 flexible hours per week remotely."
+    ],
+    "postedDate": "3 days ago"
+  }
+]

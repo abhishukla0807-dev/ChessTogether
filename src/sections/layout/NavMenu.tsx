@@ -13,8 +13,10 @@ import {
 import { useRouter } from "next/router";
 
 const MenuOptions = [
-  { text: "Learn", href: "/learn" },
   { text: "Play", href: "/play" },
+  { text: "Learn", href: "/learn" },
+  { text: "Exams", href: "/exams" },
+  { text: "Jobs", href: "/jobs" },
   { text: "Chat", href: "/chat" },
 ];
 
@@ -78,36 +80,55 @@ export default function NavMenu({ open, onClose }: Props) {
         </IconButton>
       </Box>
 
-      {/* Menu List */}
+      {/* Menu List — Clean aligned links in exact order (Play, Learn, Jobs, Chat) without icons */}
       <Box sx={{ p: 1.5 }}>
         <List disablePadding>
           {MenuOptions.map(({ text, href }) => {
             const isActive =
               router.pathname === href ||
-              (href === "/play" && router.pathname === "/");
+              (href === "/play" && router.pathname === "/") ||
+              (href !== "/play" && router.pathname.startsWith(href));
             return (
-              <ListItem key={text} disablePadding sx={{ mb: 0.5 }}>
+              <ListItem key={text} disablePadding sx={{ mb: 0.75 }}>
                 <NavLink href={href}>
                   <ListItemButton
                     onClick={onClose}
                     sx={{
-                      borderRadius: "8px",
-                      px: 2,
-                      py: 1.2,
+                      borderRadius: "10px",
+                      px: 2.5,
+                      py: 1.25,
+                      display: "flex",
+                      alignItems: "center",
                       backgroundColor: isActive
-                        ? "rgba(59, 154, 198, 0.15)"
+                        ? (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "rgba(59, 154, 198, 0.18)"
+                              : "rgba(59, 154, 198, 0.12)"
                         : "transparent",
-                      color: isActive ? "primary.main" : "inherit",
+                      color: isActive
+                        ? "primary.main"
+                        : (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "#e2e8f0"
+                              : "#334155",
+                      borderLeft: "3px solid",
+                      borderColor: isActive ? "primary.main" : "transparent",
+                      transition: "all 0.15s ease",
                       "&:hover": {
-                        backgroundColor: "rgba(59, 154, 198, 0.12)",
+                        backgroundColor: (theme) =>
+                          theme.palette.mode === "dark"
+                            ? "rgba(59, 154, 198, 0.12)"
+                            : "rgba(59, 154, 198, 0.08)",
+                        color: "primary.main",
                       },
                     }}
                   >
                     <ListItemText
                       primary={text}
                       primaryTypographyProps={{
-                        fontSize: "1rem",
+                        fontSize: "1.05rem",
                         fontWeight: isActive ? 700 : 500,
+                        letterSpacing: "-0.01em",
                       }}
                     />
                   </ListItemButton>
